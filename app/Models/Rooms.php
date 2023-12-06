@@ -14,4 +14,14 @@ class Rooms extends Model
     protected $primaryKey = 'code';
     public $incrementing = false;
     public $timestamps = false;
+
+    public function Hotel()
+    {
+        return $this->belongsTo(Hotels::class, 'hotel_code', 'code');
+    }
+
+    public function Booking()
+    {
+        return $this->hasMany(Bookings::class, 'room_code', 'code');
+    }
 }

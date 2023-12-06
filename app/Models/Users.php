@@ -14,4 +14,9 @@ class Users extends Model
     protected $primaryKey = 'id';
     public $incrementing = false;
     public $timestamps = true;
+
+    public function Booking()
+    {
+        return $this->hasMany(Bookings::class, 'user_id', 'id');
+    }
 }

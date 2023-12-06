@@ -14,4 +14,9 @@ class Htrans_hotel extends Model
     protected $primaryKey = 'id';
     public $incrementing = false;
     public $timestamps = false;
+
+    public function Dtrans()
+    {
+        return $this->hasMany(Dtrans_hotel::class, 'htrans_id', 'id');
+    }
 }
