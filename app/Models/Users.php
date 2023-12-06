@@ -19,4 +19,14 @@ class Users extends Model
     {
         return $this->hasMany(Bookings::class, 'user_id', 'id');
     }
+
+    public function Htrans()
+    {
+        return $this->hasMany(Htrans_hotel::class, 'user_id', 'id');
+    }
+
+    public function Review()
+    {
+        return $this->hasMany(Reviews::class, 'user_id', 'id');
+    }
 }

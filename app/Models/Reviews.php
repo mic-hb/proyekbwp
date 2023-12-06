@@ -14,4 +14,14 @@ class Reviews extends Model
     protected $primaryKey = 'id';
     public $incrementing = false;
     public $timestamps = false;
+
+    public function User()
+    {
+        return $this->belongsTo(Users::class, 'user_id', 'id');
+    }
+
+    public function Hotel()
+    {
+        return $this->belongsTo(Hotels::class, 'hotel_code', 'code');
+    }
 }

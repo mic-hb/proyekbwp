@@ -14,4 +14,9 @@ class Cities extends Model
     protected $primaryKey = 'code';
     public $incrementing = false;
     public $timestamps = false;
+
+    public function Hotel()
+    {
+        return $this->hasMany(Hotels::class, 'city_code', 'code');
+    }
 }

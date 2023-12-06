@@ -14,4 +14,14 @@ class Hotels extends Model
     protected $primaryKey = 'code';
     public $incrementing = false;
     public $timestamps = false;
+
+    public function City()
+    {
+        return $this->belongsTo(Cities::class, 'city_code', 'code');
+    }
+
+    public function Review()
+    {
+        return $this->hasMany(Reviews::class, 'hotel_code', 'code');
+    }
 }

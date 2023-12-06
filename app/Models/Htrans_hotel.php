@@ -19,4 +19,9 @@ class Htrans_hotel extends Model
     {
         return $this->hasMany(Dtrans_hotel::class, 'htrans_id', 'id');
     }
+
+    public function User()
+    {
+        return $this->belongsTo(Users::class, 'user_id', 'id');
+    }
 }
