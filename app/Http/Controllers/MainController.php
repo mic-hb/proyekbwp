@@ -8,7 +8,7 @@ class MainController extends Controller
 {
     public function getHomePage(Request $request)
     {
-        return view('home');
+        return view('user.home');
     }
 
     public function getHotelsPage(Request $request)

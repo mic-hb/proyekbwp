@@ -9,12 +9,12 @@ class UserController extends Controller
 {
     public function getLoginPage(Request $request)
     {
-        return view('login');
+        return view('entry.login');
     }
 
     public function getRegisterPage(Request $request)
     {
-        return view('register');
+        return view('entry.register');
     }
 
     public function getLogout(Request $request)
