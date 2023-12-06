@@ -15,6 +15,14 @@ class Users extends Model
     public $incrementing = false;
     public $timestamps = true;
 
+    protected $fillable = [
+        'id',
+        'name',
+        'email',
+        'password',
+        'phone'
+    ];
+
     public function Booking()
     {
         return $this->hasMany(Bookings::class, 'user_id', 'id');
