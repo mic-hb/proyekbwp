@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::redirect('home', '/', 301);
+
+Route::controller(MainController::class, 'getHomePage')->group(function () {
+    Route::get('/', 'getHomePage')->name('home-page');
 });
