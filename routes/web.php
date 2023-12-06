@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EntryContoller;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,4 +22,8 @@ Route::get('/', function () {
 Route::controller(EntryContoller::class)->group(function () {
     Route::get('/login', 'getLoginPage')->name('login-page');
     Route::get('/register', 'getRegisterPage')->name('register-page');
+});
+
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/home', 'getHomePage')->name('home-page');
 });
