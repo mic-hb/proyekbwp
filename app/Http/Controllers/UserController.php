@@ -7,17 +7,17 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function getLoginPage()
+    public function getLoginPage(Request $request)
     {
         return view('login');
     }
 
-    public function getRegisterPage()
+    public function getRegisterPage(Request $request)
     {
         return view('register');
     }
 
-    public function getLogout()
+    public function getLogout(Request $request)
     {
     }
 
