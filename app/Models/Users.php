@@ -14,4 +14,27 @@ class Users extends Model
     protected $primaryKey = 'id';
     public $incrementing = false;
     public $timestamps = true;
+
+    protected $fillable = [
+        'id',
+        'name',
+        'email',
+        'password',
+        'phone'
+    ];
+
+    public function Booking()
+    {
+        return $this->hasMany(Bookings::class, 'user_id', 'id');
+    }
+
+    public function Htrans()
+    {
+        return $this->hasMany(Htrans_hotel::class, 'user_id', 'id');
+    }
+
+    public function Review()
+    {
+        return $this->hasMany(Reviews::class, 'user_id', 'id');
+    }
 }
