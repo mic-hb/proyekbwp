@@ -33,8 +33,9 @@ class Users extends Model
         return $this->hasMany(Htrans_hotel::class, 'user_id', 'id');
     }
 
-    public function Review()
+    public function HotelReviews()
     {
-        return $this->hasMany(Reviews::class, 'user_id', 'id');
+        return $this->belongsToMany(Hotels::class, 'reviews', 'user_id', 'hotel_code')
+        ->withPivot('id','stars','content');
     }
 }
