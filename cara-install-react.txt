@@ -1,0 +1,21 @@
+Run di terminal VSCode :
+
+1. composer install
+2. npm install
+
+File templating ada di 'resources/views/templates'
+Contoh : main-template.blade.php
+
+3. Tambahin code di bawah ini, di bagian <head> mirip ky nambahin <script> tailwindcss :
+
+@viteReactRefresh
+@vite('resources/js/app.jsx')
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+
+4. Kalau pake template lain harus ditambahin masing-masing
+
+
+Kalau waktu ngoding :
+
+5. php artisan serve
+6. npm run dev
