@@ -12,8 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rooms', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('code')->primary;
+            $table->index('hotel_code');
+            $table->foreign('hotel_code')->references('code')->on('hotels')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('type');
+            $table->string('floor');
+            $table->string('number');
+            $table->integer('status');
+            $table->integer('price');
+            $table->timestamp('created_at', $precision = 0)->useCurrent();
+            $table->timestamp('updated_at', $precision = 0)->nullable();
+            $table->timestamp('deleted_at', $precision = 0)->nullable();
         });
     }
 

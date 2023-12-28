@@ -15,7 +15,7 @@ class Cities extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    public function Hotel()
+    public function Hotels()
     {
         return $this->hasMany(Hotels::class, 'city_code', 'code');
     }

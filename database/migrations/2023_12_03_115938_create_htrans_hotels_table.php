@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('htrans_hotels', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('id')->primary();
+            $table->index('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->dateTime('date', $precision = 0);
+            $table->integer('total');
         });
     }
 

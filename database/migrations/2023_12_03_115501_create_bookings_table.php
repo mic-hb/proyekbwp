@@ -12,8 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bookings', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('id')->primary();
+            $table->index('room_code');
+            $table->foreign('room_code')->references('code')->on('rooms')->onDelete('cascade')->onUpdate('cascade');
+            $table->index('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->dateTime('start_date', $precision = 0);
+            $table->dateTime('end_date', $precision = 0);
+            // $table->timestamp('created_at', $precision = 0)->useCurrent();
+            // $table->timestamp('updated_at', $precision = 0)->nullable();
+            // $table->timestamp('deleted_at', $precision = 0)->nullable();
         });
     }
 
