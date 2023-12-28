@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('img')->default('https://imgcy.trivago.com/c_limit,d_dummy.jpeg,f_auto,h_1300,q_auto,w_2000/hotelier-images/c8/37/457a15dbf7b554669ddbde45878d9a40c48863ca4ec0c88cb7cc99bc4369.jpeg');
-            $table->timestamp('status', $precision = 0);
+            $table->timestamp('status', $precision = 0)->nullable();
             $table->timestamp('created_at', $precision = 0)->useCurrent();
             $table->timestamp('updated_at', $precision = 0)->nullable();
             $table->timestamp('deleted_at', $precision = 0)->nullable();

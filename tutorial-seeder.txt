@@ -40,3 +40,9 @@
 11. DI dalem e public function run() :
 
     Cities::factory(10)->create();
+
+12. Cara Migrate
+    php artisan migrate --database=db_hotel_connection --path=database/migrations/new
+
+13. Cara Rollback (tapi rollback sek baru migrate)
+    php artisan migrate:rollback --database=db_hotel_connection --path=database/migrations/new
