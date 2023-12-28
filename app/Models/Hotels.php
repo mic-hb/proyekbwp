@@ -20,8 +20,9 @@ class Hotels extends Model
         return $this->belongsTo(Cities::class, 'city_code', 'code');
     }
 
-    public function Review()
+    public function UserReviews()
     {
-        return $this->hasMany(Reviews::class, 'hotel_code', 'code');
+        return $this->belongsToMany(Users::class, 'reviews', 'hotel_code', 'user_id')
+        ->withPivot('id','stars','content');
     }
 }
