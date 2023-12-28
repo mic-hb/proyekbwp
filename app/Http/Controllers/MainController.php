@@ -2,28 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hotels;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MainController extends Controller
 {
     public function getHomePage(Request $request)
     {
-        return view('home');
+        // $listHotels = Hotels::all();
+
+        return Inertia::render('index');
+        // return view('welcome');
     }
 
     public function getHotelsPage(Request $request)
     {
-        return view('hotels');
+        return Inertia::render('hotels');
     }
 
     public function getHotelDetailPage(Request $request)
     {
-        return view('hotel');
+        return Inertia::render('hotel');
     }
 
     public function getRoomDetailPage(Request $request)
     {
-        return view('room');
+        return Inertia::render('room');
     }
 
     public function postSetupBooking(Request $request)
