@@ -1,0 +1,14 @@
+1701875568-0614-1825702903,1701875567.7315,GET,/_ignition/health-check,"Spatie\LaravelIgnition\Http\Controllers\HealthCheckController",200,1091.9420719147,request
+1701875574-2362-1182302597,1701875573.9677,POST,/_ignition/execute-solution,"Spatie\LaravelIgnition\Http\Controllers\ExecuteSolutionController",204,1602.5829315186,request
+1701875582-2674-1711109527,1701875581.8646,GET,/login,"App\Http\Controllers\EntryContoller@getLoginPage",200,1345.5219268799,request
+1701875639-4656-411437407,1701875639.1379,GET,/login,"App\Http\Controllers\EntryContoller@getLoginPage",200,509.25779342651,request
+1701875762-9169-1593928218,1701875762.584,GET,/register,"App\Http\Controllers\EntryContoller@getRegisterPage",200,589.10703659058,request
+1703667370-4934-1694693105,1703667370.3077,GET,/,"App\Http\Controllers\MainController@getHomePage",500,3259.0098381042,request
+1703667513-3176-897287748,1703667513.2257,GET,/,"App\Http\Controllers\MainController@getHomePage",200,922.45197296143,request
+1703667514-7520-1770097966,1703667514.6655,GET,/,"App\Http\Controllers\MainController@getHomePage",200,833.86397361755,request
+1703667550-7739-1042849840,1703667550.6931,GET,/,"App\Http\Controllers\MainController@getHomePage",200,972.52106666565,request
+1703667608-2607-1593974420,1703667608.185,GET,/,"App\Http\Controllers\MainController@getHomePage",200,1059.7801208496,request
+1703667631-5055-685365449,1703667631.4233,GET,/,"App\Http\Controllers\MainController@getHomePage",200,1188.8370513916,request
+1703667779-5450-1952452274,1703667779.4369,GET,/home,"\Illuminate\Routing\RedirectController",301,254.390001297,request
+1703667779-7682-1078574776,1703667779.6991,GET,/,"App\Http\Controllers\MainController@getHomePage",200,232.72395133972,request
+1703667786-3011-2042731783,1703667786.2264,GET,/,"App\Http\Controllers\MainController@getHomePage",200,125.63014030457,request

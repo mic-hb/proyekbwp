@@ -1,0 +1,48 @@
+1. Bikin file Factory, jd misal e model e Hotels jadi bikin HotelsFactory
+
+    php artisan make:factory HotelsFactory --model=Hotels
+
+2. Buka file factory e, cara nya CTRL + P trus ketik HotelsFactory
+
+3. Tambahin variabel namanya $model di line 12
+
+    protected $model = Hotels::class;
+
+4. Jgn lupa Hotels::class e di CTRL + SPACE + ENTER supaya di use
+
+5. Di dalam public function definition() tambahin ini :
+
+    $numericId = $this->faker->unique()->numberBetween(1, 999); // Generate a unique random number between 1 and 999
+
+    // Format the numeric ID with leading zeros
+    $formattedId = 'H' . str_pad($numericId, 3, '0', STR_PAD_LEFT);
+
+6. Trus di dalam return []; kita masukkin kolom-kolomnya, contoh :
+
+    return [
+        'code' => $formattedId,
+        'name' => $this->faker->hotel(),
+    ];
+
+7. Nah bagian faker iki kudu eksperimen spy dpt nama hotel, city, user, dll bener
+
+8. Bikin file Seeder, jd misal e model e Hotels jadi bikin HotelsSeeder
+
+    php artisan make:seeder HotelsSeeder
+
+9. Buka file e
+
+10. Tambahin variabel namanya $model ambek $connection di line 10 + jgn lupa di USE
+
+    protected $model = Hotels::class;
+    protected $connection = 'db_hotel_connection';
+
+11. DI dalem e public function run() :
+
+    Cities::factory(10)->create();
+
+12. Cara Migrate
+    php artisan migrate --database=db_hotel_connection --path=database/migrations/new
+
+13. Cara Rollback (tapi rollback sek baru migrate)
+    php artisan migrate:rollback --database=db_hotel_connection --path=database/migrations/new
