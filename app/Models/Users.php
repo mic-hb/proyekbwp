@@ -36,6 +36,12 @@ class Users extends Model
     public function HotelReviews()
     {
         return $this->belongsToMany(Hotels::class, 'reviews', 'user_id', 'hotel_code')
-        ->withPivot('id','stars','content');
+        ->withPivot('id','stars','content','created_at','updated_at');
+    }
+
+    public function Favorites()
+    {
+        return $this->belongsToMany(Hotels::class, 'favorites', 'user_id', 'hotel_code')
+        ->withPivot('id');
     }
 }

@@ -12,8 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cities', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('code')->primary();
+            $table->string('name');
+            // $table->timestamp('created_at', $precision = 0)->useCurrent();
+            // $table->timestamp('updated_at', $precision = 0)->nullable();
+            // $table->timestamp('deleted_at', $precision = 0)->nullable();
         });
     }
 
