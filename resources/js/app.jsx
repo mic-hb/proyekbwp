@@ -1,10 +1,26 @@
-// import "./bootstrap";
+import "./bootstrap";
+import "../css/app.css";
 
-// alert("Hello World");
+import { createRoot } from "react-dom/client";
+import { createInertiaApp } from "@inertiajs/react";
+import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 
-// React Components
-import HelloReact from "./components/HelloReact";
-import Counter from "./components/Counter";
-import HomeNavBar from "./components/HomeNavBar";
-import SearchBar from "./components/SearchBar";
-import HotelCard from "./components/HotelCard";
+// const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = (import.meta.env && import.meta.env.VITE_APP_NAME) || "Laravel";
+
+createInertiaApp({
+    title: (title) => `${title} - ${appName}`,
+    resolve: (name) =>
+        resolvePageComponent(
+            `./Pages/${name}.jsx`,
+            import.meta.glob("./Pages/**/*.jsx")
+        ),
+    setup({ el, App, props }) {
+        const root = createRoot(el);
+
+        root.render(<App {...props} />);
+    },
+    progress: {
+        color: "#4B5563",
+    },
+});
