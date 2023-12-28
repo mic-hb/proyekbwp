@@ -1,7 +1,6 @@
 @extends('templates.main-template')
 
 @push('scripts')
-    <script src="https://cdn.tailwindcss.com"></script>
 @endpush
 
 @section('content')
