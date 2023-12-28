@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class HotelController extends Controller
 {
-    public function getBookingProcessPage(Request $requeest)
+    public function getBookingProcessPage(Request $request)
     {
     }
 

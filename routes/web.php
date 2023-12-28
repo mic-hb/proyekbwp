@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
@@ -59,4 +60,12 @@ Route::controller(HotelController::class)->group(function () {
     Route::get('{user_username}/{booking_id}', 'getBookingPage')->name('booking-page');                     // detail booking (hanya bisa diakses user yang login)
 });
 
-require __DIR__.'/auth.php';
+Route::Controller(AdminController::class)->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('/', 'getAdminPage')->name('admin-page');
+        Route::post('/proses', 'doProses')->name('doProses');
+        Route::post('/delete', 'doDelete')->name('doDelete');
+    });
+});
+
+require __DIR__ . '/auth.php';
