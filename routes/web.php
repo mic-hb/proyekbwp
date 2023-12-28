@@ -23,9 +23,9 @@ Route::redirect('home', '/', 301);
  */
 Route::controller(MainController::class, 'getHomePage')->group(function () {
     Route::get('/', 'getHomePage')->name('home-page');
-    Route::get('/hotels', 'getHotelsPage')->name('hotels-page');                                        // list hotel yang ada
-    Route::get('/hotels/{hotel_code}', 'getHotelDetailPage')->name('hotel-detail-page');                // detail hotel
-    Route::get('/hotels/{hotel_code}/{room_type_code}', 'getRoomDetailPage')->name('room-detail-page');      // detail jenis kamar
+    Route::get('/hotels', 'getHotelsPage')->name('hotels-page');                                            // list hotel yang ada
+    Route::get('/hotels/{hotel_code}', 'getHotelDetailPage')->name('hotel-detail-page');                    // detail hotel
+    Route::get('/hotels/{hotel_code}/{room_type_code}', 'getRoomDetailPage')->name('room-detail-page');     // detail jenis kamar
 
     // TODO: 1. kombinasi untuk booking di-hash atau di-random menjadi token (hotel_code, room_code, user_id)
     // TODO: 2. simpan ke session atau sebagai booking_id (hanya semacam token sementara)
@@ -50,9 +50,9 @@ Route::controller(UserController::class)->group(function () {
  *  Route untuk halaman-halaman yang berhubungan dengan hotel, cth: booking hotel, detail booking, dll.
  */
 Route::controller(HotelController::class)->group(function () {
-    Route::get('hotels/book/{booking_token}', 'getBookingProcessPage')->name('book-hotel-page');    // halaman booking, user mengisi data diri, tanggal, dll.
-    Route::post('hotels/book', 'postBookingProcess')->name('book-hotel');                           // proses transaction booking, simpan ke database (termasuk dtrans htrans)
+    Route::get('hotels/book/{booking_token}', 'getBookingProcessPage')->name('book-hotel-page');            // halaman booking, user mengisi data diri, tanggal, dll.
+    Route::post('hotels/book', 'postBookingProcess')->name('book-hotel');                                   // proses transaction booking, simpan ke database (termasuk dtrans htrans)
 
     // TODO: 5. tampilkan data booking berdasarkan booking_id yang sesungguhnya di database
-    Route::get('{user_username}/{booking_id}', 'getBookingPage')->name('booking-page');             // detail booking (hanya bisa diakses user yang login)
+    Route::get('{user_username}/{booking_id}', 'getBookingPage')->name('booking-page');                     // detail booking (hanya bisa diakses user yang login)
 });

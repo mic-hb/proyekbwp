@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hotels;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
     public function getHomePage(Request $request)
     {
+        $listHotels = Hotels::all();
+
         return view('user.home');
         // return view('welcome');
     }
