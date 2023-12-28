@@ -16,18 +16,15 @@ export default function NavBar() {
                     alt="Flowbite React Logo"
                 />
                 <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-                    Flowbite React
+                    NGELAN TOUR
                 </span>
             </NavbarBrand>
             <NavbarToggle />
             <NavbarCollapse>
-                <NavbarLink href="#" active>
-                    Home
-                </NavbarLink>
-                <NavbarLink href="#">About</NavbarLink>
-                <NavbarLink href="#">Services</NavbarLink>
-                <NavbarLink href="#">Pricing</NavbarLink>
-                <NavbarLink href="#">Contact</NavbarLink>
+                <NavbarLink>Favorite</NavbarLink>
+                <NavbarLink>Booked Hotel</NavbarLink>
+                <NavbarLink>Login</NavbarLink>
+                <NavbarLink>Register</NavbarLink>
             </NavbarCollapse>
         </Navbar>
     );
