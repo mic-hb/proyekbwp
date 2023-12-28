@@ -1,41 +1,17 @@
-import React from "react";
-import {
-    Navbar,
-    NavbarBrand,
-    NavbarCollapse,
-    NavbarLink,
-    NavbarToggle,
-} from "flowbite-react";
-// import { Navbar } from "flowbite-react";
-import { Head } from "@inertiajs/react";
-<Head>
-    <title>Index</title>
-</Head>;
+import GeneralLayout from "@/layouts/GeneralLayout";
 
-export default function index({ listBuku }) {
-    console.log(listBuku);
+export default function index() {
     return (
-        <Navbar fluid rounded>
-            <NavbarBrand href="https://flowbite-react.com">
-                <img
-                    src="/favicon.svg"
-                    className="mr-3 h-6 sm:h-9"
-                    alt="Flowbite React Logo"
-                />
-                <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-                    Flowbite React
-                </span>
-            </NavbarBrand>
-            <NavbarToggle />
-            <NavbarCollapse>
-                <NavbarLink href="#" active>
-                    Home
-                </NavbarLink>
-                <NavbarLink href="#">About</NavbarLink>
-                <NavbarLink href="#">Services</NavbarLink>
-                <NavbarLink href="#">Pricing</NavbarLink>
-                <NavbarLink href="#">Contact</NavbarLink>
-            </NavbarCollapse>
-        </Navbar>
+        <GeneralLayout>
+            <div className="flex flex-col items-center justify-center">
+                <h1 className="text-5xl font-bold text-center">
+                    Welcome to Flowbite React
+                </h1>
+                <p className="text-xl text-center mt-4">
+                    This is a starter template for a React application using
+                    Flowbite React components.
+                </p>
+            </div>
+        </GeneralLayout>
     );
 }
