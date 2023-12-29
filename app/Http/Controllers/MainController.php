@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hotels;
+use App\Models\Images_hotels;
+use App\Models\Images_rooms;
 use App\Models\Rooms;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,17 +17,51 @@ class MainController extends Controller
         $hotelsToBeShown = 5;
         $listHotels = Hotels::inRandomOrder()
             ->take($hotelsToBeShown)
-            ->get();
+            ->get()
+            ->makeHidden(['code', 'city_code', 'status', 'created_at', 'updated_at', 'deleted_at']);
+
+        foreach ($listHotels as $idx => $hotel) {
+            $images = Images_hotels::where('hotel_code', '=', $hotel->code)
+                ->get();
+
+            // return $images;
+
+            $image_url = [];
+            foreach ($images as $image) {
+                $image_url[] = $image->url;
+            }
+
+            $listHotels[$idx]['img'] = $image_url;
+            $listHotels[$idx]['city_name'] = $hotel->City->name;
+            $listHotels[$idx]['lowest_price'] = null;
+            unset($listHotels[$idx]['City']);
+
+            // return $listHotels[$idx]['city'];
+        }
 
         // Semacam list penawaran kamar terbaru
         $roomsToBeShown = 5;
         $listRooms = Rooms::all()
             ->sortByDesc('created_at')
-            ->take($roomsToBeShown);
+            ->take($roomsToBeShown)
+            ->makeHidden(['code', 'hotel_code', 'floor', 'number', 'status', 'created_at', 'updated_at', 'deleted_at']);
 
         // Nambahin data hotel ke masing-masing data kamar
         foreach ($listRooms as $room_code => $room) {
-            $listRooms[$room_code]['hotel'] = $room->Hotel;
+            $images = Images_rooms::where('room_types_code', '=', $room->Type->code)
+                ->get();
+
+            // return $images;
+
+            $image_url = [];
+            foreach ($images as $image) {
+                $image_url[] = $image->url;
+            }
+
+            $listRooms[$room_code]['img'] = $image_url;
+            $listRooms[$room_code]['hotel'] = $room->Hotel
+                ->makeHidden(['code', 'city_code', 'status', 'created_at', 'updated_at', 'deleted_at']);
+            $listRooms[$room_code]['on_discount'] = (bool)random_int(0, 1);
         }
 
         $arrayToBeSent = [
