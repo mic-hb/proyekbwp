@@ -26,4 +26,9 @@ class Rooms extends Model
     {
         return $this->hasMany(Bookings::class, 'room_code', 'code');
     }
+
+    public function Type()
+    {
+        return $this->belongsTo(Room_types::class, 'room_types_code', 'code');
+    }
 }

@@ -16,5 +16,15 @@ class RoomsSeeder extends Seeder
     public function run(): void
     {
         Rooms::factory(10)->create();
+
+        Rooms::create([
+            'code' => 'R011',
+            'hotel_code' => 'H001',
+            'type' => 'DLX',
+            'floor' => '01',
+            'number' => '01',
+            'status' => 0,
+            'price' => 300000,
+        ]);
     }
 }

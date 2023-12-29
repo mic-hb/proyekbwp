@@ -19,7 +19,7 @@ class CitiesFactory extends Factory
      */
     public function definition(): array
     {
-        $numericId = $this->faker->unique()->numberBetween(1, 999); // Generate a unique random number between 1 and 999
+        $numericId = $this->faker->unique()->numberBetween(1, 10); // Generate a unique random number between 1 and 999
 
         // Format the numeric ID with leading zeros
         $formattedId = 'C' . str_pad($numericId, 3, '0', STR_PAD_LEFT);

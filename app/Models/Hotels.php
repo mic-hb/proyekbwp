@@ -38,4 +38,9 @@ class Hotels extends Model
         return $this->belongsToMany(Users::class, 'favorites', 'hotel_code', 'user_id')
         ->withPivot('id');
     }
+
+    public function Images()
+    {
+        return $this->hasMany(Images_hotels::class, 'hotel_code', 'code');
+    }
 }

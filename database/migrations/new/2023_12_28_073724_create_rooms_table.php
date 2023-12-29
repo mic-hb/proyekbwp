@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->string('code', 5)->primary();
-            $table->string('hotel_code', 5)->nullable()->index('FK_HOTEL_CODE_ROOMS');
-            $table->string('type', 3)->nullable();
+            $table->string('hotel_code', 5)->index('FK_HOTEL_CODE_ROOMS');
+            $table->string('room_types_code', 5)->index('FK_ROOM_TYPES_CODE_ROOMS');
             $table->string('floor', 2)->nullable();
             $table->string('number', 2)->nullable();
             $table->integer('status')->nullable();

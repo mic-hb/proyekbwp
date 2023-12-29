@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Hotels;
+use App\Models\Room_types;
 use App\Models\Rooms;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,6 +24,7 @@ class RoomsFactory extends Factory
         $formattedId = 'R' . str_pad($numericId, 3, '0', STR_PAD_LEFT);
 
         $randomHotel = Hotels::inRandomOrder()->first();
+        $randomType = Room_types::inRandomOrder()->first();
         $randomFloor = $this->faker->numberBetween(1,50);
         $formattedFloor = str_pad($randomFloor, 2, '0', STR_PAD_LEFT);
         $randomNumber = $this->faker->numberBetween(1,20);
@@ -32,7 +34,7 @@ class RoomsFactory extends Factory
         return [
             'code' => $formattedId,
             'hotel_code' => $randomHotel->code,
-            'type' => 'DLX',
+            'type' => $randomType->code,
             'floor' => $formattedFloor,
             'number' => $formattedNumber,
             'status' => 0,
