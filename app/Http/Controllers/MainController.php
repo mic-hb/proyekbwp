@@ -11,18 +11,33 @@ class MainController extends Controller
 {
     public function getHomePage(Request $request)
     {
-        // List beberapa hotel yang muncul di cards/carousel
-        $listHotels = Hotels::all();
+        // List beberapa hotel yang muncul di cards/carousel secara RANDOM
+        $hotelsToBeShown = 5;
+        $listHotels = Hotels::inRandomOrder()
+            ->take($hotelsToBeShown)
+            ->get();
         dump($listHotels);
 
         // Semamcam list penawaran kamar terbaru
-        $listRooms = Rooms::all();
+        $roomsToBeShown = 5;
+        $listRooms = Rooms::all()
+            ->sortByDesc('created_at')
+            ->take($roomsToBeShown);
         dump($listRooms);
 
-        dd('TESTING');
+        foreach ($listRooms as $room_code => $room) {
+            $listRooms[$room_code]['hotel'] = $room->Hotel;
+        }
+
+        $listRooms = json_encode($listRooms);
+        dump($listRooms);
+        dump(json_decode($listRooms));
+
+        dd('END OF TESTING');
 
         return Inertia::render('index', [
             'listHotels' => $listHotels,
+            'listRooms' => $listRooms,
         ]);
     }
 
@@ -32,7 +47,7 @@ class MainController extends Controller
         $listHotels = Hotels::all();
         dump($listHotels);
 
-        dd('TESTING');
+        dd('END OF TESTING');
 
         return Inertia::render('hotels', [
             'listHotels' => $listHotels,
@@ -47,18 +62,30 @@ class MainController extends Controller
 
         // List kamar di hotel itu, nanti di munculin semua pake cards
         // Yang di list jenis nya, bukan spesifik per nomor kamar
-        $listRooms = $hotel->Rooms
-            ->groupBy('room_type_code')
-            ->map(function ($item, $key) {
-                return $item->first();
-            });
-        dump($listRooms);
+        $listTypes = $hotel->Rooms
+            ->groupBy('type');
+        dump($listTypes);
 
-        dd('TESTING');
+        foreach ($listTypes as $type => $rooms) {
+            $listRoomsByType[$type] = $rooms[0];
+        }
+        dump($listRoomsByType);
+
+        // List kamar dgn harga berbeda-beda
+        $listPrices = $hotel->Rooms
+            ->groupBy('price');
+        dump($listPrices);
+
+        foreach ($listPrices as $price => $rooms) {
+            $listRoomsByPrice[$price] = $rooms[0];
+        }
+        dump($listRoomsByPrice);
+
+        dd('END OF TESTING');
 
         return Inertia::render('hotel', [
             'hotel' => $hotel,
-            'listRooms' => $listRooms,
+            'listRoomsByType' => $listRoomsByType,
         ]);
     }
 
@@ -72,7 +99,7 @@ class MainController extends Controller
         $listRooms = $hotel->Rooms;
         dump($listRooms);
 
-        dd('TESTING');
+        dd('END OF TESTING');
 
         return Inertia::render('room');
     }

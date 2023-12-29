@@ -60,7 +60,7 @@ Route::controller(HotelController::class)->group(function () {
     Route::get('{user_username}/{booking_id}', 'getBookingPage')->name('booking-page');                     // detail booking (hanya bisa diakses user yang login)
 });
 
-Route::Controller(AdminController::class)->group(function () {
+Route::controller(AdminController::class)->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/', 'getAdminPage')->name('admin-page');
         Route::post('/proses', 'doProses')->name('doProses');
