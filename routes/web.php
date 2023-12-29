@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -35,6 +36,18 @@ Route::controller(MainController::class, 'getHomePage')->group(function () {
     // TODO: 3. redirect ke halaman booking sesuai dengan id hotel & id kamar yang dipilih
     // TODO: 4. tampilkan data booking berdasarkan booking_id atau token yang di-hash/di-random tadi (harus bisa di decode/un-hash)
     Route::post('hotels/{hotel_code}/{room_type_code}/setup', 'postSetupBooking')->name('setup-booking');    // proses data mengenai hotel & kamar yang di booking, redirect ke halaman booking
+});
+
+/**
+ *  Route untuk halaman-halaman yang berhubungan dengan user, cth: login, register, logout, dll.
+ */
+Route::controller(UserController::class)->group(function () {
+    Route::get('/login', 'getLoginPage')->name('login-page');
+    Route::get('/logout', 'getLogout')->name('logout');
+    Route::get('/register', 'getRegisterPage')->name('register-page');
+
+    Route::post('/postLogin', 'postLogin')->name('login');
+    Route::post('/postRegister', 'postRegister')->name('register');
 });
 
 // Route::inertia('/', 'index');
