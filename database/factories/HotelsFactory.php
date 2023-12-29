@@ -20,7 +20,7 @@ class HotelsFactory extends Factory
      */
     public function definition(): array
     {
-        $numericId = $this->faker->unique()->numberBetween(1, 10);
+        $numericId = Hotels::count() + 1;
         $formattedId ='H' . str_pad($numericId, 3, '0', STR_PAD_LEFT);
 
         $randomCity = Cities::inRandomOrder()->first();

@@ -20,7 +20,7 @@ class BookingsFactory extends Factory
      */
     public function definition(): array
     {
-        $numericId = $this->faker->unique()->numberBetween(1,10);
+        $numericId = Bookings::count() + 1;
         $formattedId ='B' . str_pad($numericId, 3, '0', STR_PAD_LEFT);
 
         $randomRoom = Rooms::inRandomOrder()->first();

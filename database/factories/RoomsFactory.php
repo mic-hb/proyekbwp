@@ -20,7 +20,7 @@ class RoomsFactory extends Factory
      */
     public function definition(): array
     {
-        $numericId = $this->faker->unique()->numberBetween(1,10);
+        $numericId = Rooms::count() + 1;
         $formattedId = 'R' . str_pad($numericId, 3, '0', STR_PAD_LEFT);
 
         $randomHotel = Hotels::inRandomOrder()->first();
@@ -34,7 +34,7 @@ class RoomsFactory extends Factory
         return [
             'code' => $formattedId,
             'hotel_code' => $randomHotel->code,
-            'type' => $randomType->code,
+            'room_types_code' => $randomType->code,
             'floor' => $formattedFloor,
             'number' => $formattedNumber,
             'status' => 0,

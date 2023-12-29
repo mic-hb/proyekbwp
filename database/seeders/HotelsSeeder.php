@@ -17,7 +17,9 @@ class HotelsSeeder extends Seeder
      */
     public function run(): void
     {
-        Hotels::factory(10)->create();
+        for ($i=0; $i < 10; $i++) {
+            Hotels::factory()->create();
+        }
 
         $listHotels = Hotels::all();
         // foreach ($listHotels as $hotel) {

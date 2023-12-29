@@ -15,12 +15,14 @@ class RoomsSeeder extends Seeder
      */
     public function run(): void
     {
-        Rooms::factory(10)->create();
+        for ($i=0; $i < 10; $i++) {
+            Rooms::factory()->create();
+        }
 
         Rooms::create([
             'code' => 'R011',
             'hotel_code' => 'H001',
-            'type' => 'DLX',
+            'room_types_code' => 'DLX',
             'floor' => '01',
             'number' => '01',
             'status' => 0,

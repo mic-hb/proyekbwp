@@ -50,7 +50,7 @@ class Room_typesSeeder extends Seeder
 
             Images_rooms::create([
                 'code' => $formattedCode,
-                'room_type_code' => $type->code,
+                'room_types_code' => $type->code,
                 'url' => 'https://picsum.photos/seed/' . $type->code . '/200/300',
             ]);
 
