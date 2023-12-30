@@ -17,6 +17,7 @@ class MainController extends Controller
         $skip = $request->query('skip');
 
         return response()->json(Hotels::select('code', 'name', 'address')
+            ->with('Images')
             ->take($take)
             ->skip($skip)
             ->get());

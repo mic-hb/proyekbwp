@@ -22,7 +22,7 @@ use Inertia\Inertia;
 
 Route::redirect('home', '/', 301);
 
-Route::inertia('/', 'home')->name('home-page');
+Route::inertia('/', 'index')->name('home-page');
 Route::inertia('/hotels', 'all-hotels')->name('all-hotels-page');
 Route::inertia('/hotel/{id}', 'detail-hotel')->name('hotel-page');
 
