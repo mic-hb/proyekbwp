@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MainController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,4 +24,13 @@ Route::get('/test', function () {
     return response()->json([
         'message' => 'Hello World!',
     ], 200);
+});
+
+Route::controller(MainController::class)->group(function () {
+    Route::get('/allHotels', 'getAllHotels');
+    Route::get('/hotel/{id}', 'getHotelById');
+    Route::get('/hotel/{id}/rooms', 'getRoomsByHotelCode');
+    Route::get('/topFavorites', 'getTopHotelsByFavorites');
+    Route::get('/topReviews', 'getTopHotelsByReviews');
+    Route::get('/randomHotels', 'getRandomHotels');
 });
