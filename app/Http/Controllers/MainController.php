@@ -36,7 +36,7 @@ class MainController extends Controller
 
     public function getTopHotelsByFavorites(){
         try {
-            $result = Hotels::select('hotels.code', DB::raw('COUNT(hotels.code) as favorite_count'))
+            $result = Hotels::select('hotels.*', DB::raw('COUNT(hotels.code) as favorite_count'))
             ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
             ->groupBy('hotels.code')
             ->get();
@@ -51,7 +51,7 @@ class MainController extends Controller
 
     public function getTopHotelsByReviews(){
         try {
-            $result = Hotels::select('hotels.code', DB::raw('COUNT(hotels.code) as review_count'))
+            $result = Hotels::select('hotels.*', DB::raw('COUNT(hotels.code) as review_count'))
             ->join('reviews', 'reviews.hotel_code', '=', 'hotels.code')
             ->groupBy('hotels.code')
             ->get();
