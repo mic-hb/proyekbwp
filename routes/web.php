@@ -22,20 +22,24 @@ use Inertia\Inertia;
 
 Route::redirect('home', '/', 301);
 
+Route::inertia('/', 'home')->name('home-page');
+Route::inertia('/hotels', 'all-hotels')->name('all-hotels-page');
+Route::inertia('/hotel/{id}', 'detail-hotel')->name('hotel-page');
+
 /**
  *  Route untuk halaman-halaman utama, cth: home, halaman hotel, halaman kamar, dll.
  */
 Route::controller(MainController::class, 'getHomePage')->group(function () {
-    Route::get('/', 'getHomePage')->name('home-page');
-    Route::get('/hotels', 'getHotelsPage')->name('hotels-page');                                            // list hotel yang ada
-    Route::get('/hotels/{hotel_code}', 'getHotelDetailPage')->name('hotel-detail-page');                    // detail hotel
-    Route::get('/hotels/{hotel_code}/{room_type_code}', 'getRoomDetailPage')->name('room-detail-page');     // detail jenis kamar
+    // Route::get('/', 'getHomePage')->name('home-page');
+    // Route::get('/hotels', 'getHotelsPage')->name('hotels-page');                                            // list hotel yang ada
+    // Route::get('/hotels/{hotel_code}', 'getHotelDetailPage')->name('hotel-detail-page');                    // detail hotel
+    // Route::get('/hotels/{hotel_code}/{room_type_code}', 'getRoomDetailPage')->name('room-detail-page');     // detail jenis kamar
 
     // TODO: 1. kombinasi untuk booking di-hash atau di-random menjadi token (hotel_code, room_code, user_id)
     // TODO: 2. simpan ke session atau sebagai booking_id (hanya semacam token sementara)
     // TODO: 3. redirect ke halaman booking sesuai dengan id hotel & id kamar yang dipilih
     // TODO: 4. tampilkan data booking berdasarkan booking_id atau token yang di-hash/di-random tadi (harus bisa di decode/un-hash)
-    Route::post('hotels/{hotel_code}/{room_type_code}/setup', 'postSetupBooking')->name('setup-booking');    // proses data mengenai hotel & kamar yang di booking, redirect ke halaman booking
+    // Route::post('hotels/{hotel_code}/{room_type_code}/setup', 'postSetupBooking')->name('setup-booking');    // proses data mengenai hotel & kamar yang di booking, redirect ke halaman booking
 });
 
 /**
