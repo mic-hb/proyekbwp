@@ -34,3 +34,13 @@ Route::controller(MainController::class)->group(function () {
     Route::get('/topReviews', 'getTopHotelsByReviews');
     Route::get('/randomHotels', 'getRandomHotels');
 });
+
+Route::get('/testpassword', function () {
+    // Bikin password manual pake hashing bcrypt bawaan laravel
+    $password = '123';
+
+    // Hash the password
+    $hashedPassword = bcrypt($password);
+
+    return response()->json($hashedPassword, 200);
+});
