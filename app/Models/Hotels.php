@@ -17,6 +17,8 @@ class Hotels extends Model
     public $incrementing = false;
     public $timestamps = true;
 
+    protected $fillable = ["code", "city_code", "name", "address"];
+
     public function City()
     {
         return $this->belongsTo(Cities::class, 'city_code', 'code');
@@ -30,13 +32,13 @@ class Hotels extends Model
     public function UserReviews()
     {
         return $this->belongsToMany(Users::class, 'reviews', 'hotel_code', 'user_id')
-        ->withPivot('id','stars','content','created_at','updated_at');
+            ->withPivot('id', 'stars', 'content', 'created_at', 'updated_at');
     }
 
     public function UserFavorites()
     {
         return $this->belongsToMany(Users::class, 'favorites', 'hotel_code', 'user_id')
-        ->withPivot('id');
+            ->withPivot('id');
     }
 
     public function Images()

@@ -10,7 +10,14 @@ class AdminController extends Controller
     public function doProses(Request $request)
     {
         if ($request->has('btnInsert')) {
-            $result = Hotels::create($request->all());
+            $code = Hotels::all()->count() + 1;
+            $formattedCode = 'H' . str_pad($code, 3, '0', STR_PAD_LEFT);
+            $result = Hotels::create([
+                "code" => $formattedCode,
+                "city_code" => $request->city_code,
+                "name" => $request->name,
+                "address" => $request->address,
+            ]);
             if ($result) {
                 return back()->with('pesan', 'sukses');
             } else {
@@ -20,8 +27,8 @@ class AdminController extends Controller
             $item = Hotels::find($request->code);
             $result = $item->update([
                 "name" => $request->name,
+                "city_code" => $request->city_code,
                 "address" => $request->address,
-                "img" =>  $request->img,
                 "status" => $request->status,
             ]);
             return back()->with('pesan, sukses');

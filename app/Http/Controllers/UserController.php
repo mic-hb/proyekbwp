@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -53,19 +54,15 @@ class UserController extends Controller
 
         // TODO: Lanjutin login pake AUTH
 
-        $credentials = $request->only('email', 'password');
-
-        // if (auth()->attempt($credentials)) {
-        //     return redirect()->route('home-page');
-        // }
-
-        // return redirect()->back()->with('error', 'Invalid credentials');
-
-        if (auth()->attempt($credentials)) {
-            return "Login berhasil";
+        $credential = [
+            'email' => $request->email,
+            'password' => $request->password
+        ];
+        if (Auth::guard("User")->attempt($credential)) {
+            return true;
+        } else {
+            return false;
         }
-
-        return "Login gagal";
     }
 
     public function postRegister(Request $request)
