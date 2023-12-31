@@ -45,4 +45,13 @@ class Hotels extends Model
     {
         return $this->hasMany(Images_hotels::class, 'hotel_code', 'code');
     }
+
+    protected $casts = [
+        'image_urls' => 'json',
+    ];
+
+    public function getImagesAttribute()
+    {
+        return $this->Images()->pluck('url')->toArray();
+    }
 }

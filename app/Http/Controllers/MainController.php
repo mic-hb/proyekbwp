@@ -12,18 +12,32 @@ use Inertia\Inertia;
 
 class MainController extends Controller
 {
-    public function getAllHotels(Request $request){
+    public function getAllHotels(Request $request)
+    {
         $take = $request->query('take');
         $skip = $request->query('skip');
 
-        return response()->json(Hotels::select('code', 'name', 'address')
-            ->with('Images')
+        // $result = Hotels::select('code', 'name', 'address')
+        //     ->with('Images')
+        //     ->take($take)
+        //     ->skip($skip)
+        //     ->get();
+
+        $result = Hotels::select('hotels.*')
+            ->with('City')
+            ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
             ->take($take)
             ->skip($skip)
-            ->get());
+            ->get();
+
+        return response()->json(
+            $result,
+            200
+        );
     }
 
-    public function getHotelById(string $id){
+    public function getHotelById(string $id)
+    {
         try {
             $result = Hotels::where('code', '=', $id)->with('City', 'Images')->get();
 
@@ -35,12 +49,13 @@ class MainController extends Controller
         }
     }
 
-    public function getTopHotelsByFavorites(){
+    public function getTopHotelsByFavorites()
+    {
         try {
             $result = Hotels::select('hotels.*', DB::raw('COUNT(hotels.code) as favorite_count'))
-            ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
-            ->groupBy('hotels.code')
-            ->get();
+                ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
+                ->groupBy('hotels.code')
+                ->get();
 
             return response()->json($result, 200);
         } catch (\Throwable $th) {
@@ -50,12 +65,13 @@ class MainController extends Controller
         }
     }
 
-    public function getTopHotelsByReviews(){
+    public function getTopHotelsByReviews()
+    {
         try {
             $result = Hotels::select('hotels.*', DB::raw('COUNT(hotels.code) as review_count'))
-            ->join('reviews', 'reviews.hotel_code', '=', 'hotels.code')
-            ->groupBy('hotels.code')
-            ->get();
+                ->join('reviews', 'reviews.hotel_code', '=', 'hotels.code')
+                ->groupBy('hotels.code')
+                ->get();
 
             return response()->json($result, 200);
         } catch (\Throwable $th) {
@@ -65,14 +81,15 @@ class MainController extends Controller
         }
     }
 
-    public function getRandomHotels(int $take, int $skip){
+    public function getRandomHotels(int $take, int $skip)
+    {
         // List beberapa hotel yang muncul di cards/carousel secara RANDOM
         $listHotels = Hotels::select('code', 'name', 'address', 'city_code')
             ->inRandomOrder()
             ->take($$take)
             ->skip($skip)
             ->get();
-            // ->makeHidden(['code', 'city_code', 'status', 'created_at', 'updated_at', 'deleted_at']);
+        // ->makeHidden(['code', 'city_code', 'status', 'created_at', 'updated_at', 'deleted_at']);
 
         foreach ($listHotels as $idx => $hotel) {
             $images = Images_hotels::where('hotel_code', '=', $hotel->code)
@@ -92,7 +109,8 @@ class MainController extends Controller
         return response()->json($listHotels);
     }
 
-    public function getRoomsByHotelCode(string $id){
+    public function getRoomsByHotelCode(string $id)
+    {
         try {
             // $result = Hotels::findOrFail($id)
             //     ->Rooms
@@ -112,7 +130,8 @@ class MainController extends Controller
         }
     }
 
-    public function getRandomRooms(){
+    public function getRandomRooms()
+    {
         // Semacam list penawaran kamar terbaru
         $roomsToBeShown = 5;
         $listRooms = Rooms::all()
