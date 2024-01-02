@@ -24,7 +24,13 @@ Route::redirect('home', '/', 301);
 
 Route::inertia('/', 'index')->name('home-page');
 Route::inertia('/hotels', 'hotels')->name('all-hotels-page');
-Route::inertia('/hotel/{id}', 'detail-hotel')->name('hotel-page');
+// Route::inertia('/hotel/{id}', 'detail-hotel')->name('hotel-page');
+
+Route::get('/hotel/{code}', function ($code) {
+    return Inertia::render('index', [
+        'code' => $code,
+    ]);
+})->name('hotel-page');
 
 /**
  *  Route untuk halaman-halaman utama, cth: home, halaman hotel, halaman kamar, dll.
