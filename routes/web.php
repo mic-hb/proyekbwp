@@ -19,6 +19,15 @@ use Inertia\Inertia;
 
 Route::redirect('home', '/', 301);
 
+<<<<<<< Updated upstream
+=======
+Route::inertia('/', 'index')->name('home-page');
+Route::inertia('/hotels', 'hotels')->name('all-hotels-page');
+Route::inertia('/hotel/{id}', 'detailHotel')->name('hotel-page'); 
+
+Route::inertia('/coba', 'coba');
+
+>>>>>>> Stashed changes
 /**
  *  Route untuk halaman-halaman utama, cth: home, halaman hotel, halaman kamar, dll.
  */

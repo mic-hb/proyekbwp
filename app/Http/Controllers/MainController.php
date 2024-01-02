@@ -21,9 +21,27 @@ class MainController extends Controller
         return Inertia::render('hotels');
     }
 
+<<<<<<< Updated upstream
     public function getHotelDetailPage(Request $request)
     {
         return Inertia::render('hotel');
+=======
+    public function getTopHotelsByFavorites(){
+        try {
+            $result = Hotels::select('hotels.*', DB::raw('COUNT(hotels.code) as favorite_count'))
+            ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
+            ->groupBy('hotels.code')
+            ->get();
+
+            // 
+
+            return response()->json($result, 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error',
+            ], 404);
+        }
+>>>>>>> Stashed changes
     }
 
     public function getRoomDetailPage(Request $request)
