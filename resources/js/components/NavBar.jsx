@@ -21,6 +21,7 @@ export default function NavBar() {
             </NavbarBrand>
             <NavbarToggle />
             <NavbarCollapse>
+                <NavbarLink>Hotels</NavbarLink>
                 <NavbarLink>Favorite</NavbarLink>
                 <NavbarLink>Booked Hotel</NavbarLink>
                 <NavbarLink>Login</NavbarLink>

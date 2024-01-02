@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import api from "@/api";
 import GeneralLayout from "@/layouts/general";
 import Spinner from "@/components/spinner";
+import Card from "@/components/card";
 
 import { Carousel } from "flowbite-react";
 
@@ -34,10 +35,8 @@ export default function hotels() {
     }, []);
 
     return (
-        <GeneralLayout>
-            {!isLoading ? (
-                <Spinner />
-            ) : (
+        <GeneralLayout isLoading={isLoading}>
+            <div>
                 <div className="w-full h-96 p-4">
                     <Carousel pauseOnHover>
                         <img
@@ -62,7 +61,19 @@ export default function hotels() {
                         />
                     </Carousel>
                 </div>
-            )}
+                <main className="flex flex-col gap-4 w-full items-center">
+                    {hotels.map((hotel) => (
+                        <Card
+                            key={hotel.code}
+                            image="https://flowbite.com/docs/images/blog/image-1.jpg"
+                            title={hotel.name}
+                            rating="4"
+                            price="599"
+                            action="Book Now"
+                        />
+                    ))}
+                </main>
+            </div>
         </GeneralLayout>
     );
 }

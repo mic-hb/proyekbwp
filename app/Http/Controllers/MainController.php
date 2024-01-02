@@ -74,6 +74,7 @@ class MainController extends Controller
         }
     }
 
+<<<<<<< HEAD
     public function getTopHotelsByFavorites()
     {
         try {
@@ -81,13 +82,35 @@ class MainController extends Controller
                 ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
                 ->groupBy('hotels.code')
                 ->get();
+=======
+<<<<<<< Updated upstream
+    public function getHotelDetailPage(Request $request)
+    {
+        return Inertia::render('hotel');
+=======
+    public function getTopHotelsByFavorites(){
+        try {
+            $result = Hotels::select('hotels.*', DB::raw('COUNT(hotels.code) as favorite_count'))
+            ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
+            ->groupBy('hotels.code')
+            ->get();
+
+            // 
+>>>>>>> origin/melvin
 
             return response()->json($result, 200);
         } catch (\Throwable $th) {
             return response()->json([
+<<<<<<< HEAD
                 'message' => $th->getMessage(),
             ], 404);
         }
+=======
+                'message' => 'Error',
+            ], 404);
+        }
+>>>>>>> Stashed changes
+>>>>>>> origin/melvin
     }
 
     public function getTopHotelsByReviews()
