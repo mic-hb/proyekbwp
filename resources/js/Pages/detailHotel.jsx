@@ -12,22 +12,11 @@ export default function detailHotel() {
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
-            // const hotelRequest = await api.get("/allHotels", {
-            //     params: {
-            //         skip: 0,
-            //         take: 5,
-            //     },
-            // });
             const hotelDetailRequest = await api.get(`/hotel/${roomCode}`);
 
             try {
-                const [hotelDetailResponse] = await Promise.all([
-                    hotelDetailRequest.data[0],
-                ]);
-                setHotel(hotelDetailResponse);
-                // const [hotelResponse] = await Promise.all([hotelRequest.data]);
-                // setHotels(hotelResponse);
-                console.log(hotel);
+                const [hotelResponse] = await Promise.all([hotelDetailRequest.data]);
+                setHotel(hotelResponse);
             } catch (error) {
                 console.log(error);
             } finally {

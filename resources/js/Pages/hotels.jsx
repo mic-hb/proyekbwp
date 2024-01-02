@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "@/api";
 import GeneralLayout from "@/layouts/general";
-import Spinner from "@/components/spinner";
 import Card from "@/components/card";
 
 import { Carousel } from "flowbite-react";
