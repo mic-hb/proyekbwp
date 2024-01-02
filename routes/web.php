@@ -61,6 +61,8 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/logout', 'getLogout')->name('logout');
     Route::get('/register', 'getRegisterPage')->name('register-page');
 
+    Route::get('/profile', 'getProfilePage')->name('profile-page')->middleware(['CekRole:user']);
+
     Route::post('/postLogin', 'postLogin')->name('login');
     Route::post('/postRegister', 'postRegister')->name('register');
 });
