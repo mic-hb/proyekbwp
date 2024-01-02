@@ -8,12 +8,36 @@ export default function register() {
             <form className="flex max-w-xl w-full flex-col gap-4">
                 <div>
                     <div className="mb-2 block">
+                        <Label htmlFor="name" value="Your Name" />
+                    </div>
+                    <TextInput
+                        id="name"
+                        type="text"
+                        placeholder="aaa bbb"
+                        required
+                        shadow
+                    />
+                </div>
+                <div>
+                    <div className="mb-2 block">
                         <Label htmlFor="email2" value="Your email" />
                     </div>
                     <TextInput
                         id="email2"
                         type="email"
-                        placeholder="name@flowbite.com"
+                        placeholder="name@email.com"
+                        required
+                        shadow
+                    />
+                </div>
+                <div>
+                    <div className="mb-2 block">
+                        <Label htmlFor="phone" value="Phone Number" />
+                    </div>
+                    <TextInput
+                        id="phone"
+                        type="tel"
+                        placeholder="081234567890"
                         required
                         shadow
                     />
@@ -26,7 +50,10 @@ export default function register() {
                 </div>
                 <div>
                     <div className="mb-2 block">
-                        <Label htmlFor="repeat-password" value="Repeat password" />
+                        <Label
+                            htmlFor="repeat-password"
+                            value="Repeat password"
+                        />
                     </div>
                     <TextInput
                         id="repeat-password"

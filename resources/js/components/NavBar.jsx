@@ -22,7 +22,7 @@ export default function NavBar() {
             <NavbarToggle />
             <NavbarCollapse>
                 <NavbarLink href="/hotels">Hotels</NavbarLink>
-                <NavbarLink href="">Favorite</NavbarLink>
+                <NavbarLink href="/favourites">Favorite</NavbarLink>
                 <NavbarLink href="">Booked Hotel</NavbarLink>
                 <NavbarLink href="/login">Login</NavbarLink>
                 <NavbarLink href="/register">Register</NavbarLink>

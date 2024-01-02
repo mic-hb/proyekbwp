@@ -38,6 +38,7 @@ Route::inertia('/register', 'register')->name('register-page');
 
 Route::inertia('/', 'index')->name('home-page');
 Route::inertia('/hotels', 'hotels')->name('all-hotels-page');
+Route::inertia('/favourites', 'favourites')->name('favourites-page');
 
 Route::inertia('/coba', 'coba');
 
