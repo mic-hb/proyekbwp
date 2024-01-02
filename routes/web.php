@@ -32,6 +32,10 @@ Route::get('/hotel/{id}', function ($id) {
     ]);
 })->name('hotel-page');
 
+Route::inertia('/login', 'login')->name('login-page');
+Route::inertia('/register', 'register')->name('register-page');
+
+
 Route::inertia('/', 'index')->name('home-page');
 Route::inertia('/hotels', 'hotels')->name('all-hotels-page');
 
