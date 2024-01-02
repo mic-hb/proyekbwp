@@ -14,32 +14,57 @@ class MainController extends Controller
 {
     public function getAllHotels(Request $request)
     {
-        $take = $request->query('take');
-        $skip = $request->query('skip');
+        try {
+            $take = $request->query('take');
+            $skip = $request->query('skip');
 
-        // $result = Hotels::select('code', 'name', 'address')
-        //     ->with('Images')
-        //     ->take($take)
-        //     ->skip($skip)
-        //     ->get();
+            // $result = Hotels::select('code', 'name', 'address')
+            //     ->with('Images')
+            //     ->take($take)
+            //     ->skip($skip)
+            //     ->get();
 
-        $result = Hotels::select('hotels.*')
-            ->with('City')
-            ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
-            ->take($take)
-            ->skip($skip)
-            ->get();
+            $result = Hotels::select('hotels.*')
+                ->with('City')
+                ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
+                ->addSelect(DB::raw('(SELECT cities.name FROM cities WHERE cities.code = hotels.city_code) as city_name'))
+                ->take($take)
+                ->skip($skip)
+                ->get();
 
-        return response()->json(
-            $result,
-            200
-        );
+            return response()->json(
+                $result,
+                200
+            );
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage(),
+            ], 404);
+        }
     }
 
     public function getHotelById(string $id)
     {
         try {
-            $result = Hotels::where('code', '=', $id)->with('City', 'Images')->get();
+            $result = Hotels::select('hotels.*', DB::raw('COUNT(hotels.code) as favorite_count'))
+                ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
+                ->groupBy('hotels.code')
+                ->get();
+
+            $result = Hotels::select('hotels.*')
+                ->where('code', '=', $id)
+                // ->with('City')
+                // ->with('Images')
+                ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
+                ->addSelect(DB::raw('(SELECT cities.name FROM cities WHERE cities.code = hotels.city_code) as city_name'))
+                ->addSelect(DB::raw('COUNT(hotels.code) as review_count'), DB::raw('AVG(reviews.stars) as average_rating'))
+                ->join('reviews', 'reviews.hotel_code', '=', 'hotels.code')
+                // ->addSelect(DB::raw('COUNT(hotels.code) as favorite_count'))
+                // ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
+                ->addSelect(DB::raw('(SELECT COUNT(favorites.hotel_code) FROM favorites WHERE favorites.hotel_code = hotels.code) as favorite_count'))
+                ->groupBy('hotels.code')
+                ->orderBy('average_rating', 'DESC')
+                ->get();
 
             return response()->json($result, 200);
         } catch (\Throwable $th) {
@@ -60,7 +85,7 @@ class MainController extends Controller
             return response()->json($result, 200);
         } catch (\Throwable $th) {
             return response()->json([
-                'message' => 'Error',
+                'message' => $th->getMessage(),
             ], 404);
         }
     }
@@ -68,15 +93,16 @@ class MainController extends Controller
     public function getTopHotelsByReviews()
     {
         try {
-            $result = Hotels::select('hotels.*', DB::raw('COUNT(hotels.code) as review_count'))
+            $result = Hotels::select('hotels.*', DB::raw('COUNT(hotels.code) as review_count'), DB::raw('AVG(reviews.stars) as average_rating'))
                 ->join('reviews', 'reviews.hotel_code', '=', 'hotels.code')
                 ->groupBy('hotels.code')
+                ->orderBy('average_rating', 'DESC')
                 ->get();
 
             return response()->json($result, 200);
         } catch (\Throwable $th) {
             return response()->json([
-                'message' => 'Error',
+                'message' => $th->getMessage(),
             ], 404);
         }
     }
