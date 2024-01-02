@@ -7,8 +7,6 @@ export default function detailHotel() {
     const [isLoading, setIsLoading] = useState(true);
     const [hotel, setHotel] = useState({});
     const roomCode = usePage().props.id;
-    console.log(roomCode);
-
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
@@ -16,7 +14,8 @@ export default function detailHotel() {
 
             try {
                 const [hotelResponse] = await Promise.all([hotelDetailRequest.data]);
-                setHotel(hotelResponse);
+                setHotel(hotelResponse[0]);
+                console.log(hotelResponse);
             } catch (error) {
                 console.log(error);
             } finally {
