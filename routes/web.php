@@ -24,7 +24,22 @@ Route::redirect('home', '/', 301);
 
 Route::inertia('/', 'index')->name('home-page');
 Route::inertia('/hotels', 'hotels')->name('all-hotels-page');
-Route::inertia('/hotel/{id}', 'detail-hotel')->name('hotel-page');
+// Route::inertia('/hotel/{id}', 'detail-hotel')->name('hotel-page');
+
+Route::get('/hotel/{id}', function ($id) {
+    return Inertia::render('detailHotel', [
+        'id' => $id,
+    ]);
+})->name('hotel-page');
+
+Route::inertia('/login', 'login')->name('login-page');
+Route::inertia('/register', 'register')->name('register-page');
+
+
+Route::inertia('/', 'index')->name('home-page');
+Route::inertia('/hotels', 'hotels')->name('all-hotels-page');
+
+Route::inertia('/coba', 'coba');
 
 /**
  *  Route untuk halaman-halaman utama, cth: home, halaman hotel, halaman kamar, dll.
@@ -49,6 +64,8 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/login', 'getLoginPage')->name('login-page');
     Route::get('/logout', 'getLogout')->name('logout');
     Route::get('/register', 'getRegisterPage')->name('register-page');
+
+    Route::get('/profile', 'getProfilePage')->name('profile-page')->middleware(['CekRole:user']);
 
     Route::post('/postLogin', 'postLogin')->name('login');
     Route::post('/postRegister', 'postRegister')->name('register');

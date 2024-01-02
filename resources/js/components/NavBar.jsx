@@ -9,7 +9,7 @@ import {
 export default function NavBar() {
     return (
         <Navbar fluid rounded>
-            <NavbarBrand href="https://flowbite-react.com">
+            <NavbarBrand href="/">
                 <img
                     src="https://flowbite.com/docs/images/logo.svg"
                     className="mr-3 h-6 sm:h-9"
@@ -21,10 +21,11 @@ export default function NavBar() {
             </NavbarBrand>
             <NavbarToggle />
             <NavbarCollapse>
-                <NavbarLink>Favorite</NavbarLink>
-                <NavbarLink>Booked Hotel</NavbarLink>
-                <NavbarLink>Login</NavbarLink>
-                <NavbarLink>Register</NavbarLink>
+                <NavbarLink href="/hotels">Hotels</NavbarLink>
+                <NavbarLink href="">Favorite</NavbarLink>
+                <NavbarLink href="">Booked Hotel</NavbarLink>
+                <NavbarLink href="/login">Login</NavbarLink>
+                <NavbarLink href="/register">Register</NavbarLink>
             </NavbarCollapse>
         </Navbar>
     );

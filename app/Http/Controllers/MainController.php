@@ -58,7 +58,7 @@ class MainController extends Controller
                 ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
                 ->addSelect(DB::raw('(SELECT cities.name FROM cities WHERE cities.code = hotels.city_code) as city_name'))
                 ->addSelect(DB::raw('COUNT(hotels.code) as review_count'), DB::raw('AVG(reviews.stars) as average_rating'))
-                ->join('reviews', 'reviews.hotel_code', '=', 'hotels.code')
+                ->leftJoin('reviews', 'reviews.hotel_code', '=', 'hotels.code')
                 // ->addSelect(DB::raw('COUNT(hotels.code) as favorite_count'))
                 // ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
                 ->addSelect(DB::raw('(SELECT COUNT(favorites.hotel_code) FROM favorites WHERE favorites.hotel_code = hotels.code) as favorite_count'))
@@ -81,6 +81,8 @@ class MainController extends Controller
                 ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
                 ->groupBy('hotels.code')
                 ->get();
+
+            //
 
             return response()->json($result, 200);
         } catch (\Throwable $th) {
