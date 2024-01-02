@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
@@ -67,20 +68,33 @@ class UserController extends Controller
 
     public function postRegister(Request $request)
     {
-        $request->validate([
-            'name' => 'required|alpha_num|min:3',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|alpha_num|min:8|confirmed'
-        ]);
 
-        $user = new User();
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
+        try {
+            // $request->validate([
+            //     'name' => 'required|alpha_num|min:3',
+            //     'email' => 'required|email|unique:users',
+            //     'password' => 'required|alpha_num|min:8|confirmed'
+            // ]);
 
-        $user->password = bcrypt($request->input('password'));
+            $user = new Users();
+            $code = Users::all()->count() + 1;
+            $formattedCode = 'U' . str_pad($code, 3, '0', STR_PAD_LEFT);
+            $user->id = $formattedCode;
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
 
-        $user->save();
+            $user->password = bcrypt($request->input('password'));
 
-        return redirect()->route('login-page')->with('success', 'You have been registered successfully');
+            $user->phone = $request->input('phone');
+
+            $user->role = 1;
+
+            $user->save();
+
+            // return redirect()->route('login-page')->with('success', 'You have been registered successfully');
+            return true;
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
     }
 }
