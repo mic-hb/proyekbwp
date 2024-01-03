@@ -35,12 +35,14 @@ Route::controller(MainController::class)->group(function () {
     Route::get('/randomHotels', 'getRandomHotels');
 });
 
-Route::get('/testpassword', function () {
+Route::get('/testpassword/', function (Request $request) {
     // Bikin password manual pake hashing bcrypt bawaan laravel
-    $password = '123';
+    // $password = '123';
+    $password = 'admin';
+    // $password = $request->password;
 
     // Hash the password
     $hashedPassword = bcrypt($password);
 
-    return response()->json($hashedPassword, 200);
+    return $hashedPassword;
 });

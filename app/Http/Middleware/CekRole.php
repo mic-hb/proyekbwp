@@ -14,14 +14,16 @@ class CekRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, ...$data): Response
+    public function handle(Request $request, Closure $next, int $role): Response
     {
         if (!Auth::guard('User')->check()) {
-            return redirect()->route('login-page');
+            return redirect('/login');
         }
 
-        return $data;
+        if (Auth::guard('User')->user()->role != $role) {
+            abort(403, 'Unauthorized action.');
+        }
 
-        // return $next($request);
+        return $next($request);
     }
 }

@@ -19,7 +19,7 @@ class UsersSeeder extends Seeder
             'id' => 'U000',
             'name' => 'Admin',
             'email' => 'admin',
-            'password' => '$2a$10$SCAI1Hk4gKW/XoZ0UjevL.WI9.lWqUEuwPm9ng3wnAzLUIf4vuYIa',
+            'password' => bcrypt('admin'),
             'phone' => '0812345678',
             'role' => 0,
         ]);
@@ -27,7 +27,7 @@ class UsersSeeder extends Seeder
             'id' => 'U001',
             'name' => 'Asep',
             'email' => 'asep@gmail.com',
-            'password' => '$2a$10$z/HnLcGtfBBHMLYpfWavUu6iyfV2z8WCbOow4Tm.WpDqX9t3S9SxG',
+            'password' => bcrypt('123'),
             'phone' => '0812345678',
             'role' => 1,
         ]);
@@ -35,7 +35,7 @@ class UsersSeeder extends Seeder
             'id' => 'U002',
             'name' => 'Solihin',
             'email' => 'solihin@gmail.com',
-            'password' => '$2a$10$z/HnLcGtfBBHMLYpfWavUu6iyfV2z8WCbOow4Tm.WpDqX9t3S9SxG',
+            'password' => bcrypt('123'),
             'phone' => '0812345678',
             'role' => 2,
         ]);

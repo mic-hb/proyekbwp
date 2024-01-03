@@ -23,6 +23,8 @@ class UserController extends Controller
 
     public function getLogout(Request $request)
     {
+        Auth::guard('User')->logout();
+        return true;
     }
 
     public function postLogin(Request $request)
@@ -36,6 +38,7 @@ class UserController extends Controller
         *   Kalau mau testing pake POSTMAN di comment aja
         */
 
+        // TODO: Validasi email tidak boleh kembar
 
         // Ini validasi tapi ada semacam IF atau conditional
         $request->validate([
@@ -45,13 +48,14 @@ class UserController extends Controller
                 'required|email'                // Elsenya, kalau ada validasi ini
             ),
             'password' => Rule::when(
-                $request->email == 'admin',
+                $request->password == 'admin' || $request->password == '123',
                 '',
                 'required|alpha_num|min:8'
             )
         ]);
 
-        return 'Selesai validasi';
+        // return 'Selesai validasi';
+        // return $request->all();
 
         // TODO: Lanjutin login pake AUTH
 
@@ -59,16 +63,16 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => $request->password
         ];
+
         if (Auth::guard("User")->attempt($credential)) {
-            return true;
+            return Auth::guard("User")->user();
         } else {
-            return false;
+            return 0;
         }
     }
 
     public function postRegister(Request $request)
     {
-
         try {
             // $request->validate([
             //     'name' => 'required|alpha_num|min:3',
@@ -82,13 +86,9 @@ class UserController extends Controller
             $user->id = $formattedCode;
             $user->name = $request->input('name');
             $user->email = $request->input('email');
-
             $user->password = bcrypt($request->input('password'));
-
             $user->phone = $request->input('phone');
-
             $user->role = 1;
-
             $user->save();
 
             // return redirect()->route('login-page')->with('success', 'You have been registered successfully');

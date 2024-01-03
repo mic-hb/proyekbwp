@@ -62,11 +62,8 @@ Route::controller(MainController::class, 'getHomePage')->group(function () {
  *  Route untuk halaman-halaman yang berhubungan dengan user, cth: login, register, logout, dll.
  */
 Route::controller(UserController::class)->group(function () {
-    Route::get('/login', 'getLoginPage')->name('login-page');
     Route::get('/logout', 'getLogout')->name('logout');
-    Route::get('/register', 'getRegisterPage')->name('register-page');
-
-    Route::get('/profile', 'getProfilePage')->name('profile-page')->middleware(['CekRole:user']);
+    Route::get('/profile', 'getProfilePage')->name('profile-page')->middleware(['CekRole:1']);
 
     Route::post('/postLogin', 'postLogin')->name('login');
     Route::post('/postRegister', 'postRegister')->name('register');
@@ -97,7 +94,7 @@ Route::controller(HotelController::class)->group(function () {
 
 Route::controller(AdminController::class)->group(function () {
     Route::prefix('admin')->group(function () {
-        Route::get('/', 'getAdminPage')->name('admin-page');
+        Route::get('/', 'getAdminPage')->name('admin-page')->middleware(['CekRole:0']);
         Route::post('/proses', 'doProses')->name('doProses');
         Route::post('/delete', 'doDelete')->name('doDelete');
     });
