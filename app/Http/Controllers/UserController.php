@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use PhpParser\Node\Stmt\TryCatch;
@@ -31,7 +32,8 @@ class UserController extends Controller
         // TODO: Validasi email tidak boleh kembar
 
         // Ini validasi tapi ada semacam IF atau conditional
-        $request->validate([
+        // $request->validate([
+        $rules = [
             'email' => Rule::when(
                 $request->email == 'admin',     // Kalau inputan email == 'admin'
                 '',                             // Maka gak perlu ada validasi apa-apa
@@ -42,10 +44,13 @@ class UserController extends Controller
                 '',
                 'required|alpha_num|min:8'
             ),
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+        ];
 
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()]);
+        }
 
         // return 'Selesai validasi';
         // return $request->all();
@@ -73,14 +78,25 @@ class UserController extends Controller
             //     'password' => 'required|alpha_num|min:8|confirmed'
             // ]);
 
-            $request->validate([
+            $rules = [
                 'name' => 'required|alpha_num',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|alpha_num|min:8|confirmed',
-                'phone' => 'required'
-            ]);
+                'email' => 'required|email|unique:App\Models\Users,email',
+                'phone' => 'required',
 
-            $code = Users::all()->count() + 1;
+                'password' => Rule::when(
+                $request->password == '123',
+                'required|alpha_num|confirmed',
+                'required|alpha_num|min:8|confirmed'
+            ),
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json(['errors'=>$validator->errors()]);
+            }
+
+            $code = Users::all()->count();
             $formattedCode = 'U' . str_pad($code, 3, '0', STR_PAD_LEFT);
 
             $user = new Users();
