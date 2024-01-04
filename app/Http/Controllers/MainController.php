@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Hotels;
 use App\Models\Images_hotels;
 use App\Models\Images_rooms;
+use App\Models\Room_types;
 use App\Models\Rooms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -140,20 +141,25 @@ class MainController extends Controller
     public function getRoomsByHotelCode(string $id)
     {
         try {
-            // $result = Hotels::findOrFail($id)
-            //     ->Rooms
-            //     ->groupBy('room_types_code');
-
             $result = Hotels::findOrFail($id)
                 ->Rooms()
-                ->with('Images') // Include the Images relationship
+                // ->with('Images') // Include the Images relationship
                 ->get()
                 ->groupBy('room_types_code');
+
+            $result = Room_types::select('room_types.*')
+                // ->with('Images')
+                ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_rooms AS images WHERE images.room_types_code = room_types.code) as image_urls'))
+                ->addSelect(DB::raw('(SELECT COUNT(rooms.code) FROM rooms WHERE rooms.room_types_code = room_types.code) as room_count'))
+                // ->addSelect(DB::raw('(CASE WHEN COUNT(rooms_code) > 0 THEN true ELSE false END) as status'))
+                ->addSelect(DB::raw('(CASE WHEN (SELECT COUNT(rooms.code) FROM rooms WHERE rooms.room_types_code = room_types.code) > 0 THEN true ELSE false END) as isAvailable'))
+                ->whereIn('code', $result->keys())
+                ->get();
 
             return response()->json($result, 200);
         } catch (\Throwable $th) {
             return response()->json([
-                'message' => 'Hotel not found',
+                'message' => $th->getMessage(),
             ], 404);
         }
     }

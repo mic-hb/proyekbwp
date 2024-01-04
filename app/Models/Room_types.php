@@ -18,6 +18,9 @@ class Room_types extends Model
     protected $fillable = [
         'code',
         'name',
+        'description',
+        'facilities',
+        'capacity',
     ];
 
     public function Rooms()

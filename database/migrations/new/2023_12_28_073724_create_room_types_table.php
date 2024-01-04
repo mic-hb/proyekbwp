@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('room_types', function (Blueprint $table) {
             $table->string('code', 5)->primary();
             $table->string('name');
+            $table->string('description')->nullable();
+            $table->string('facilities')->nullable();
+            $table->integer('capacity')->default(1);
         });
     }
 
