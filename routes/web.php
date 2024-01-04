@@ -5,6 +5,7 @@ use App\Http\Controllers\HotelController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ManagerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -58,28 +59,6 @@ Route::controller(MainController::class, 'getHomePage')->group(function () {
     // Route::post('hotels/{hotel_code}/{room_type_code}/setup', 'postSetupBooking')->name('setup-booking');    // proses data mengenai hotel & kamar yang di booking, redirect ke halaman booking
 });
 
-/**
- *  Route untuk halaman-halaman yang berhubungan dengan user, cth: login, register, logout, dll.
- */
-Route::controller(UserController::class)->group(function () {
-    Route::get('/logout', 'getLogout')->name('logout');
-    Route::get('/profile', 'getProfilePage')->name('profile-page')->middleware(['CekRole:1']);
-
-    Route::post('/postLogin', 'postLogin')->name('login');
-    Route::post('/postRegister', 'postRegister')->name('register');
-});
-
-// Route::inertia('/', 'index');
-
-// Route::get('/', function () {
-//     return Inertia::render('index', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//         'namaKita' => "Budi",
-//     ]);
-// });
 
 /**
  *  Route untuk halaman-halaman yang berhubungan dengan hotel, cth: booking hotel, detail booking, dll.
@@ -92,12 +71,53 @@ Route::controller(HotelController::class)->group(function () {
     Route::get('{user_username}/{booking_id}', 'getBookingPage')->name('booking-page');                     // detail booking (hanya bisa diakses user yang login)
 });
 
+
+/**
+ *  Route untuk halaman-halaman yang berhubungan dengan user, cth: login, register, logout, dll.
+ */
+Route::controller(UserController::class)->group(function () {
+    Route::get('/logout', 'getLogout')->name('logout');
+    Route::get('/profile', '')->name('profile-page')->middleware(['CekRole:1']);
+
+    Route::post('/postLogin', 'postLogin')->name('login');
+    Route::post('/postRegister', 'postRegister')->name('register');
+});
+
+
+/**
+ *  Route untuk admin
+ */
 Route::controller(AdminController::class)->group(function () {
-    Route::prefix('admin')->group(function () {
-        Route::get('/', 'getAdminPage')->name('admin-page')->middleware(['CekRole:0']);
-        Route::post('/proses', 'doProses')->name('doProses');
-        Route::post('/delete', 'doDelete')->name('doDelete');
+    Route::middleware(['CekRole:0'])->group(function () {
+        Route::prefix('admin')->group(function () {
+            Route::get('/', 'getAdminPage')->name('admin-page');
+            Route::post('/proses', 'doProses')->name('doProses');
+            Route::post('/delete', 'doDelete')->name('doDelete');
+        });
     });
 });
+
+
+/**
+ *  Route untuk manager hotel / seller
+ */
+Route::controller(ManagerController::class)->group(function () {
+    Route::middleware(['CekRole:2'])->group(function () {
+        Route::get('/manager', '')->name('dashboard-page');
+    });
+});
+
+
+// Route::inertia('/', 'index');
+
+// Route::get('/', function () {
+//     return Inertia::render('index', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//         'namaKita' => "Budi",
+//     ]);
+// });
 
 require __DIR__ . '/auth.php';
