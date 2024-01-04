@@ -51,8 +51,11 @@ class UserController extends Controller
                 $request->password == 'admin' || $request->password == '123',
                 '',
                 'required|alpha_num|min:8'
-            )
+            ),
+            'email' => 'required',
+            'password' => 'required'    
         ]);
+
 
         // return 'Selesai validasi';
         // return $request->all();
@@ -79,6 +82,13 @@ class UserController extends Controller
             //     'email' => 'required|email|unique:users',
             //     'password' => 'required|alpha_num|min:8|confirmed'
             // ]);
+
+            $request->validate([
+                'name' => 'required|alpha_num',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|alpha_num|min:8|confirmed',
+                'phone' => 'required'
+            ]);
 
             $user = new Users();
             $code = Users::all()->count() + 1;
