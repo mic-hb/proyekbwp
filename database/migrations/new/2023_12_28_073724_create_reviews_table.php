@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('hotel_code', 5)->index('FK_HOTEL_CODE_REVIEWS');
             $table->integer('stars');
             $table->string('content')->nullable();
+            $table->timestamps();
         });
     }
 

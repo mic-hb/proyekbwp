@@ -42,11 +42,11 @@ class RunMigration extends Command
         // ]);
 
         /** Specify the names of the migrations files in the order you want to
-        * loaded
-        * $migrations =[
-        *               'xxxx_xx_xx_000000_create_nameTable_table.php',
-        *    ];
-        */
+         * loaded
+         * $migrations =[
+         *               'xxxx_xx_xx_000000_create_nameTable_table.php',
+         *    ];
+         */
         // $migrations = [
         //                 '2023_12_28_073724_create_bookings_table',
         //                 '2023_12_28_073724_create_cities_table',
@@ -96,7 +96,7 @@ class RunMigration extends Command
 
         $this->call('migrate:fresh', [
             '--database' => 'db_hotel_connection',
-            '--path' => 'database/migrations/new' ,
+            '--path' => 'database/migrations/new',
         ]);
 
         $seeders = [
@@ -106,13 +106,14 @@ class RunMigration extends Command
             'RoomsSeeder',
             'UsersSeeder',
             'TransactionSeeder',
+            'FavoritesSeeder',
+            'ReviewsSeeder',
         ];
 
-        foreach($seeders as $seed)
-        {
-           $this->call('db:seed', [
-            '--class' => $seed ,
-           ]);
+        foreach ($seeders as $seed) {
+            $this->call('db:seed', [
+                '--class' => $seed,
+            ]);
         }
     }
 }

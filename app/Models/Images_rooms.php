@@ -21,6 +21,10 @@ class Images_rooms extends Model
         'url',
     ];
 
+    protected $casts = [
+        'image_urls' => 'json',
+    ];
+
     public function RoomType()
     {
         return $this->belongsTo(Room_types::class, 'room_types_code', 'code');

@@ -20,14 +20,15 @@ class FavoritesSeeder extends Seeder
 
         $ctr = 1;
         foreach ($listUsers as $user) {
-            $listHotels->random(5)->each(function ($hotel) use ($user) {
-                $user->UserFavorites()
-                    ->attach([
-                        'id' => 'F' . str_pad(((int)DB::table('favorites')->count() + 1), 3, '0', STR_PAD_LEFT),
-                        'hotel_code' => $hotel->code,
-                    ])
-                    ->save();
-            });
+            if ($user->id != 'U000') {
+                $listHotels->random(5)->each(function ($hotel) use ($user) {
+                    $user->Favorites()
+                        ->attach(
+                            $hotel->code,
+                            ['id' => 'F' . str_pad((DB::connection('db_hotel_connection')->table('favorites')->count() + 1), 3, '0', STR_PAD_LEFT)],
+                        );
+                });
+            }
         }
 
         // DB::raw('INSERT INTO favorites (id, user_id, hotel_code) VALUES ("F001", "U001", "H001")');

@@ -10,14 +10,14 @@ use Illuminate\Database\Seeder;
 class HotelsSeeder extends Seeder
 {
     protected $model = Hotels::class;
-    protected $connection ='db_hotel_connection';
+    protected $connection = 'db_hotel_connection';
 
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        for ($i=0; $i < 10; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             Hotels::factory()->create();
         }
 
@@ -40,5 +40,10 @@ class HotelsSeeder extends Seeder
 
             $code++;
         }
+
+        Images_hotels::create([
+            'code' => 'IH011',
+            'hotel_code' => 'H001',
+        ]);
     }
 }

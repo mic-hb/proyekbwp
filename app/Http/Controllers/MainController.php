@@ -7,6 +7,7 @@ use App\Models\Images_hotels;
 use App\Models\Images_rooms;
 use App\Models\Room_types;
 use App\Models\Rooms;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -26,9 +27,11 @@ class MainController extends Controller
             //     ->get();
 
             $result = Hotels::select('hotels.*')
-                ->with('City')
+                // ->with('City')
                 ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
                 ->addSelect(DB::raw('(SELECT cities.name FROM cities WHERE cities.code = hotels.city_code) as city_name'))
+                ->addSelect(DB::raw('(SELECT COUNT(favorites.hotel_code) FROM favorites WHERE favorites.hotel_code = hotels.code) as favorite_count'))
+                ->addSelect(DB::raw('(SELECT AVG(reviews.stars) FROM reviews WHERE reviews.hotel_code = hotels.code) as average_rating'))
                 ->take($take)
                 ->skip($skip)
                 ->get();
@@ -56,14 +59,19 @@ class MainController extends Controller
                 ->where('code', '=', $id)
                 // ->with('City')
                 // ->with('Images')
+                ->with('UserReviews')
                 ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
                 ->addSelect(DB::raw('(SELECT cities.name FROM cities WHERE cities.code = hotels.city_code) as city_name'))
-                ->addSelect(DB::raw('COUNT(hotels.code) as review_count'), DB::raw('AVG(reviews.stars) as average_rating'))
-                ->leftJoin('reviews', 'reviews.hotel_code', '=', 'hotels.code')
+                ->addSelect(DB::raw('(SELECT COUNT(favorites.hotel_code) FROM favorites WHERE favorites.hotel_code = hotels.code) as favorite_count'))
+                ->addSelect(DB::raw('(SELECT COUNT(reviews.hotel_code) FROM reviews WHERE reviews.hotel_code = hotels.code) as review_count'))
+                ->addSelect(DB::raw('(SELECT AVG(reviews.stars) FROM reviews WHERE reviews.hotel_code = hotels.code) as average_rating'))
+                // ->addSelect(DB::raw('(SELECT reviews.* FROM reviews WHERE reviews.hotel_code = hotels.code) as reviews'))
+                // ->addSelect(DB::raw('COUNT(hotels.code) as review_count'))
+                // ->leftJoin('reviews', 'reviews.hotel_code', '=', 'hotels.code')
                 // ->addSelect(DB::raw('COUNT(hotels.code) as favorite_count'))
                 // ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
-                ->addSelect(DB::raw('(SELECT COUNT(favorites.hotel_code) FROM favorites WHERE favorites.hotel_code = hotels.code) as favorite_count'))
-                ->groupBy('hotels.code')
+                // ->groupBy('hotels.code')
+                // ->orderBy('average_rating', 'DESC')
                 ->orderBy('average_rating', 'DESC')
                 ->get();
 
@@ -78,9 +86,11 @@ class MainController extends Controller
     public function getTopHotelsByFavorites()
     {
         try {
-            $result = Hotels::select('hotels.*', DB::raw('COUNT(hotels.code) as favorite_count'))
-                ->join('favorites', 'favorites.hotel_code', '=', 'hotels.code')
-                ->groupBy('hotels.code')
+            $result = Hotels::select('hotels.*')
+                ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
+                ->addSelect(DB::raw('(SELECT cities.name FROM cities WHERE cities.code = hotels.city_code) as city_name'))
+                ->addSelect(DB::raw('(SELECT COUNT(favorites.hotel_code) FROM favorites WHERE favorites.hotel_code = hotels.code) as favorite_count'))
+                ->orderBy('favorite_count', 'DESC')
                 ->get();
 
             //
@@ -96,9 +106,11 @@ class MainController extends Controller
     public function getTopHotelsByReviews()
     {
         try {
-            $result = Hotels::select('hotels.*', DB::raw('COUNT(hotels.code) as review_count'), DB::raw('AVG(reviews.stars) as average_rating'))
-                ->join('reviews', 'reviews.hotel_code', '=', 'hotels.code')
-                ->groupBy('hotels.code')
+            $result = Hotels::select('hotels.*')
+                ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
+                ->addSelect(DB::raw('(SELECT cities.name FROM cities WHERE cities.code = hotels.city_code) as city_name'))
+                ->addSelect(DB::raw('(SELECT COUNT(reviews.hotel_code) FROM reviews WHERE reviews.hotel_code = hotels.code) as review_count'))
+                ->addSelect(DB::raw('(SELECT AVG(reviews.stars) FROM reviews WHERE reviews.hotel_code = hotels.code) as average_rating'))
                 ->orderBy('average_rating', 'DESC')
                 ->get();
 
@@ -141,19 +153,18 @@ class MainController extends Controller
     public function getRoomsByHotelCode(string $id)
     {
         try {
-            $result = Hotels::findOrFail($id)
-                ->Rooms()
-                // ->with('Images') // Include the Images relationship
-                ->get()
-                ->groupBy('room_types_code');
-
             $result = Room_types::select('room_types.*')
                 // ->with('Images')
                 ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_rooms AS images WHERE images.room_types_code = room_types.code) as image_urls'))
                 ->addSelect(DB::raw('(SELECT COUNT(rooms.code) FROM rooms WHERE rooms.room_types_code = room_types.code) as room_count'))
-                // ->addSelect(DB::raw('(CASE WHEN COUNT(rooms_code) > 0 THEN true ELSE false END) as status'))
                 ->addSelect(DB::raw('(CASE WHEN (SELECT COUNT(rooms.code) FROM rooms WHERE rooms.room_types_code = room_types.code) > 0 THEN true ELSE false END) as isAvailable'))
-                ->whereIn('code', $result->keys())
+                ->selectRaw('(SELECT MIN(rooms.price) FROM rooms WHERE rooms.room_types_code = room_types.code AND rooms.hotel_code = ?) as lowest_price', [$id])
+                ->whereIn('code', Hotels::findOrFail($id)
+                    ->Rooms()
+                    ->get()
+                    ->groupBy('room_types_code')
+                    ->keys()
+                    ->all())
                 ->get();
 
             return response()->json($result, 200);

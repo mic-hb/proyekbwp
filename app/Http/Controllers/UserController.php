@@ -11,16 +11,6 @@ use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
-    public function getLoginPage(Request $request)
-    {
-        return Inertia::render('entry.login');
-    }
-
-    public function getRegisterPage(Request $request)
-    {
-        return Inertia::render('entry.register');
-    }
-
     public function getLogout(Request $request)
     {
         Auth::guard('User')->logout();
@@ -53,7 +43,7 @@ class UserController extends Controller
                 'required|alpha_num|min:8'
             ),
             'email' => 'required',
-            'password' => 'required'    
+            'password' => 'required'
         ]);
 
 
@@ -90,9 +80,10 @@ class UserController extends Controller
                 'phone' => 'required'
             ]);
 
-            $user = new Users();
             $code = Users::all()->count() + 1;
             $formattedCode = 'U' . str_pad($code, 3, '0', STR_PAD_LEFT);
+
+            $user = new Users();
             $user->id = $formattedCode;
             $user->name = $request->input('name');
             $user->email = $request->input('email');

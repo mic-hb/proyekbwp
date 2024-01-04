@@ -32,4 +32,13 @@ class Room_types extends Model
     {
         return $this->hasMany(Images_rooms::class, 'room_types_code', 'code');
     }
+
+    protected $casts = [
+        'image_urls' => 'json',
+    ];
+
+    public function getImagesAttribute()
+    {
+        return $this->Images()->pluck('url')->toArray();
+    }
 }

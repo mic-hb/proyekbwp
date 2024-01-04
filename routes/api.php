@@ -21,9 +21,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Testing API
 Route::get('/test', function () {
-    return response()->json([
-        'message' => 'Hello World!',
-    ], 200);
+    try {
+        return App\Models\Hotels::findOrFail('H004')
+            ->UserReviews;
+
+        return response()->json([
+            'message' => 'Hello World!',
+        ], 200);
+    } catch (\Throwable $th) {
+        return response()->json([
+            'message' => $th->getMessage(),
+        ], 404);
+    }
 });
 
 Route::controller(MainController::class)->group(function () {

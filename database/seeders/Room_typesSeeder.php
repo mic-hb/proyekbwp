@@ -66,5 +66,15 @@ class Room_typesSeeder extends Seeder
 
             $code++;
         }
+
+        Images_rooms::create([
+            'code' => 'IR006',
+            'room_types_code' => 'DLX',
+        ]);
+
+        Images_rooms::create([
+            'code' => 'IR007',
+            'room_types_code' => 'REG',
+        ]);
     }
 }
