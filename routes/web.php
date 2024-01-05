@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\HotelController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -37,7 +37,7 @@ Route::inertia('/login', 'login')->name('login-page');
 Route::inertia('/register', 'register')->name('register-page');
 
 
-Route::inertia('/', 'index')->name('home-page');
+// Route::inertia('/', 'index')->name('home-page');
 Route::inertia('/hotels', 'hotels')->name('all-hotels-page');
 Route::inertia('/favourites', 'favourites')->name('favourites-page');
 
@@ -63,12 +63,16 @@ Route::controller(MainController::class, 'getHomePage')->group(function () {
 /**
  *  Route untuk halaman-halaman yang berhubungan dengan hotel, cth: booking hotel, detail booking, dll.
  */
-Route::controller(HotelController::class)->group(function () {
-    Route::get('hotels/book/{booking_token}', 'getBookingProcessPage')->name('book-hotel-page');            // halaman booking, user mengisi data diri, tanggal, dll.
-    Route::post('hotels/book', 'postBookingProcess')->name('book-hotel');                                   // proses transaction booking, simpan ke database (termasuk dtrans htrans)
+Route::controller(BookingController::class)->group(function () {
+    Route::middleware(['CekRole:1'])->group(function () {
+        Route::post('/bookings/setup', 'postSetupBooking')->name('setup-booking');                             // proses data mengenai hotel & kamar yang di booking, redirect ke halaman booking
+    });
 
-    // TODO: 5. tampilkan data booking berdasarkan booking_id yang sesungguhnya di database
-    Route::get('{user_username}/{booking_id}', 'getBookingPage')->name('booking-page');                     // detail booking (hanya bisa diakses user yang login)
+    // Route::get('hotels/book/{booking_token}', 'getBookingProcessPage')->name('book-hotel-page');            // halaman booking, user mengisi data diri, tanggal, dll.
+    // Route::post('hotels/book', 'postBookingProcess')->name('book-hotel');                                   // proses transaction booking, simpan ke database (termasuk dtrans htrans)
+
+    // // TODO: 5. tampilkan data booking berdasarkan booking_id yang sesungguhnya di database
+    // Route::get('{user_username}/{booking_id}', 'getBookingPage')->name('booking-page');                     // detail booking (hanya bisa diakses user yang login)
 });
 
 
@@ -76,9 +80,9 @@ Route::controller(HotelController::class)->group(function () {
  *  Route untuk halaman-halaman yang berhubungan dengan user, cth: login, register, logout, dll.
  */
 Route::controller(UserController::class)->group(function () {
-    Route::get('/logout', 'getLogout')->name('logout');
-    Route::get('/profile', '')->name('profile-page')->middleware(['CekRole:1']);
+    Route::get('/profile', 'getProfilePage')->name('profile-page')->middleware(['CekRole:1']);                               // data user + list favorite & review
 
+    Route::get('/logout', 'getLogout')->name('logout');
     Route::post('/postLogin', 'postLogin')->name('login');
     Route::post('/postRegister', 'postRegister')->name('register');
 });
@@ -103,7 +107,7 @@ Route::controller(AdminController::class)->group(function () {
  */
 Route::controller(ManagerController::class)->group(function () {
     Route::middleware(['CekRole:2'])->group(function () {
-        Route::get('/manager', '')->name('dashboard-page');
+        Route::get('/manager', 'getDashboardPage')->name('dashboard-page');
     });
 });
 

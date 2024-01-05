@@ -15,6 +15,7 @@ class UserController extends Controller
     public function getLogout(Request $request)
     {
         Auth::guard('User')->logout();
+
         return true;
     }
 
@@ -49,7 +50,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return response()->json(['errors'=>$validator->errors()]);
+            return response()->json(['errors' => $validator->errors()]);
         }
 
         // return 'Selesai validasi';
@@ -84,16 +85,16 @@ class UserController extends Controller
                 'phone' => 'required',
 
                 'password' => Rule::when(
-                $request->password == '123',
-                'required|alpha_num|confirmed',
-                'required|alpha_num|min:8|confirmed'
-            ),
+                    $request->password == '123',
+                    'required|alpha_num|confirmed',
+                    'required|alpha_num|min:8|confirmed'
+                ),
             ];
 
             $validator = Validator::make($request->all(), $rules);
 
             if ($validator->fails()) {
-                return response()->json(['errors'=>$validator->errors()]);
+                return response()->json(['errors' => $validator->errors()]);
             }
 
             $code = Users::all()->count();
