@@ -35,14 +35,20 @@ export default function register() {
 
             if (registerResponse.status === true) {
                 console.log(registerResponse.message);
+                alert("Register success");
+
+                window.location.href = "/login";
             }
 
             if (registerResponse.message === "Invalid") {
+                var message = "";
                 for (const [key, value] of Object.entries(
                     registerResponse.errors
                 )) {
                     console.log(`${key}: ${value}`);
+                    message += key + ": " + value + "\n";
                 }
+                alert(message);
             }
         } catch (error) {
             console.log(error);

@@ -12,11 +12,30 @@ use PhpParser\Node\Stmt\TryCatch;
 
 class UserController extends Controller
 {
+    public function checkLogin(Request $request)
+    {
+        if (Auth::guard('User')->check()) {
+            return response()->json([
+                'status' => (bool)true,
+                'message' => 'LoggedIn',
+                'user' => Auth::guard('User')->user()
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => (bool)false,
+                'message' => 'Unauthorized'
+            ]);
+        }
+    }
+
     public function getLogout(Request $request)
     {
         Auth::guard('User')->logout();
 
-        return true;
+        return response()->json([
+            'status' => (bool)true,
+            'message' => 'Successfully Logged Out',
+        ], 200);
     }
 
     public function postLogin(Request $request)

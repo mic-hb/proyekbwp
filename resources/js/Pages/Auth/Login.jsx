@@ -26,18 +26,25 @@ export default function login() {
 
             if (loginResponse.status === true) {
                 console.log(loginResponse.message);
+                alert(loginResponse.message);
+
+                window.location.href = "/";
             }
 
             if (loginResponse.message === "Unauthorized") {
                 console.log("Wrong email or password");
+                alert("Wrong email or password");
             }
 
+            var message = "";
             if (loginResponse.message === "Invalid") {
                 for (const [key, value] of Object.entries(
                     loginResponse.errors
                 )) {
                     console.log(`${key}: ${value}`);
+                    message += key + ": " + value + "\n";
                 }
+                alert(message);
             }
         } catch (error) {
             console.log(error);
@@ -79,7 +86,7 @@ export default function login() {
                     <Checkbox id="remember" />
                     <Label htmlFor="remember">Remember me</Label>
                 </div>
-                <Button onClick={() => handleLogin()}>Submit</Button>
+                <Button onClick={() => handleLogin()}>Login</Button>
             </div>
         </GeneralLayout>
     );

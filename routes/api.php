@@ -105,6 +105,8 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/logout', 'getLogout')->name('logout');
     Route::post('/postLogin', 'postLogin')->name('login');
     Route::post('/postRegister', 'postRegister')->name('register');
+
+    Route::get('/checkLogin', 'checkLogin')->name('checkLogin');
 });
 
 
