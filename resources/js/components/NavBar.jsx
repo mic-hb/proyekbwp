@@ -67,11 +67,13 @@ export default function NavBar() {
             </NavbarBrand>
             <NavbarToggle />
             <NavbarCollapse>
-                <NavbarLink href="/hotels">Hotels</NavbarLink>
-                <NavbarLink href="/favourites">Favorite</NavbarLink>
-                <NavbarLink href="">Booked Hotel</NavbarLink>
+                <div className="flex items-center gap-10">
+                    <NavbarLink href="/hotels">Hotels</NavbarLink>
+                    <NavbarLink href="/favourites">Favorite</NavbarLink>
+                    <NavbarLink href="">Booked Hotel</NavbarLink>
+                </div>
                 {isLoggedIn ? (
-                    <>
+                    <div className="flex items-center gap-8">
                         <NavbarLink
                             className="hover:cursor-pointer"
                             // onClick={handleLogout}
@@ -85,14 +87,14 @@ export default function NavBar() {
                             size="sm"
                             color="success"
                         >
-                            <div className="font-medium dark:text-white">
+                            <div className="font-medium dark:text-white justify-center">
                                 <div>{user.name}</div>
                                 <div className="text-sm text-gray-500 dark:text-gray-400">
                                     {user.email}
                                 </div>
                             </div>
                         </Avatar>
-                    </>
+                    </div>
                 ) : (
                     <>
                         <NavbarLink href="/login">Login</NavbarLink>

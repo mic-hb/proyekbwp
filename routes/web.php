@@ -37,6 +37,8 @@ Route::get('/hotel/{id}', function ($id) {
 Route::inertia('/login', 'login')->name('login-page');
 Route::inertia('/register', 'register')->name('register-page');
 
+Route::inertia('/admin', 'admin')->name('admin-page');
+
 Route::middleware(['CekRole:1'])->group(function () {
     Route::inertia('/favourites', 'favourites')->name('favourites-page');
     Route::inertia('/book', 'book')->name('book-page');
