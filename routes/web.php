@@ -38,6 +38,7 @@ Route::inertia('/login', 'login')->name('login-page');
 Route::inertia('/register', 'register')->name('register-page');
 
 Route::inertia('/admin', 'admin')->name('admin-page');
+Route::inertia('/invoice', 'invoice')->name('invoice-page');
 
 Route::middleware(['CekRole:1'])->group(function () {
     Route::inertia('/favourites', 'favourites')->name('favourites-page');
