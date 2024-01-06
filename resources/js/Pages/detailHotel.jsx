@@ -11,29 +11,38 @@ export default function detailHotel() {
     const [room, setRoom] = useState([]);
     const hotelCode = usePage().props.id;
     const [image_urls, setImage_urls] = useState([]);
-    const [bookData, setBookData] = useState({});
-    const handleBooking = async(roomCode, lowest_price) => {
-        setBookData(
-            {
+    const [bookingData, setBookingData] = useState({});
+
+    const handleBooking = async (roomCode, lowest_price) => {
+        setIsLoading(true);
+        setBookingData({
             room_type_code: roomCode,
             hotel_code: hotel.code,
             lowest_price: lowest_price,
         });
-        const bookRequest = await api.post("/bookings/setup", bookData);
-        if (bookRequest.status === 200) {
-            window.location.href = "/book";
+
+        const bookingRequest = await api.post("/bookings/setup", bookingData);
+
+        try {
+            const [bookingResponse] = await Promise.all([bookingRequest.data]);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
-        console.log(bookData);
-    }, [bookData]);
+        console.log(bookingData);
+    }, [bookingData]);
 
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
             const hotelDetailRequest = await api.get(`/hotel/${hotelCode}`);
-            const roomDetailRequest = await api.get(`/hotel/${hotelCode}/rooms`);
+            const roomDetailRequest = await api.get(
+                `/hotel/${hotelCode}/rooms`
+            );
 
             try {
                 const [hotelResponse] = await Promise.all([
@@ -97,7 +106,15 @@ export default function detailHotel() {
                                             </p>
                                             <p>{room.description}</p>
                                         </div>
-                                        <button onClick={() => handleBooking(room.code, room.lowest_price)} className="px-4 p-2 bg-green-400 rounded-md hover:bg-green-500 font-semibold text-xl">
+                                        <button
+                                            onClick={() =>
+                                                handleBooking(
+                                                    room.code,
+                                                    room.lowest_price
+                                                )
+                                            }
+                                            className="px-4 p-2 bg-green-400 rounded-md hover:bg-green-500 font-semibold text-xl"
+                                        >
                                             Book Now
                                         </button>
                                     </div>

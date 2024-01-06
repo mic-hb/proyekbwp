@@ -16,6 +16,8 @@ class CekRole
      */
     public function handle(Request $request, Closure $next, int $role): Response
     {
+        // return response()->json(Auth::user());
+
         if (!Auth::guard('User')->check()) {
             return redirect('/login');
         }

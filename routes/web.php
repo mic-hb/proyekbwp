@@ -7,7 +7,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ManagerController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 /*
@@ -21,12 +23,11 @@ use Inertia\Inertia;
 |
 */
 
-Route::redirect('home', '/', 301);
+Route::redirect('/home', '/', 301);
 
 Route::inertia('/', 'index')->name('home-page');
-Route::inertia('/hotels', 'hotels')->name('all-hotels-page');
-// Route::inertia('/hotel/{id}', 'detail-hotel')->name('hotel-page');
 
+Route::inertia('/hotels', 'hotels')->name('all-hotels-page');
 Route::get('/hotel/{id}', function ($id) {
     return Inertia::render('detailHotel', [
         'id' => $id,
@@ -36,12 +37,31 @@ Route::get('/hotel/{id}', function ($id) {
 Route::inertia('/login', 'login')->name('login-page');
 Route::inertia('/register', 'register')->name('register-page');
 
-
-// Route::inertia('/', 'index')->name('home-page');
-Route::inertia('/hotels', 'hotels')->name('all-hotels-page');
-Route::inertia('/favourites', 'favourites')->name('favourites-page');
-Route::inertia('/book', 'book')->name('book-page');
+Route::middleware(['CekRole:1'])->group(function () {
+    Route::inertia('/favourites', 'favourites')->name('favourites-page');
+    Route::inertia('/book', 'book')->name('book-page');
+});
 
 Route::inertia('/coba', 'coba');
+
+
+/**
+ * Testing
+ */
+Route::get('/test', function () {
+    try {
+        // Session::put('key', 'value');
+        dd(Session::all());
+        return Auth::user();
+
+        return response()->json([
+            'message' => 'Hello World!',
+        ], 200);
+    } catch (\Throwable $th) {
+        return response()->json([
+            'message' => $th->getMessage(),
+        ], 404);
+    }
+})->middleware(['web']);
 
 require __DIR__ . '/auth.php';

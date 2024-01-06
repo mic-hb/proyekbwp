@@ -21,6 +21,7 @@ class UserController extends Controller
 
     public function postLogin(Request $request)
     {
+        // return response()->$request->all();
         /*
         *   JANGAN LUPA KE FILE app/Http/Kernel.php
         *   CTRL + P -> Kernel.php
@@ -50,7 +51,11 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()]);
+            return response()->json([
+                'status' => (bool)false,
+                'message' => 'Invalid',
+                'errors' => $validator->errors()
+            ]);
         }
 
         // return 'Selesai validasi';
@@ -63,10 +68,18 @@ class UserController extends Controller
             'password' => $request->password
         ];
 
-        if (Auth::guard("User")->attempt($credential)) {
-            return Auth::guard("User")->user();
+        if (Auth::guard('User')->attempt($credential)) {
+            // return Auth::user();
+            return response()->json([
+                'status' => (bool)true,
+                'message' => 'Success',
+                'user' => Auth::guard('User')->user()
+            ], 200);
         } else {
-            return 0;
+            return response()->json([
+                'status' => (bool)false,
+                'message' => 'Unauthorized'
+            ]);
         }
     }
 
@@ -94,7 +107,11 @@ class UserController extends Controller
             $validator = Validator::make($request->all(), $rules);
 
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()]);
+                return response()->json([
+                    'status' => (bool)false,
+                    'message' => 'Invalid',
+                    'errors' => $validator->errors()
+                ]);
             }
 
             $code = Users::all()->count();
@@ -110,9 +127,15 @@ class UserController extends Controller
             $user->save();
 
             // return redirect()->route('login-page')->with('success', 'You have been registered successfully');
-            return true;
+            return response()->json([
+                'status' => (bool)true,
+                'message' => 'Success',
+            ], 200);
         } catch (\Throwable $th) {
-            return $th->getMessage();
+            return response()->json([
+                'status' => (bool)false,
+                'message' => $th->getMessage(),
+            ], 404);
         }
     }
 }

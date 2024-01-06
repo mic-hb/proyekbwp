@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,8 +27,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Testing API
 Route::get('/test', function () {
     try {
-        return App\Models\Hotels::findOrFail('H004')
-            ->UserReviews;
+        // session(['key' => 'value']);
+        // return session('key');
+        dd(session()->all());
+        return Auth::user();
 
         return response()->json([
             'message' => 'Hello World!',
@@ -81,7 +84,7 @@ Route::controller(MainController::class, 'getHomePage')->group(function () {
  *  Route untuk halaman-halaman yang berhubungan dengan hotel, cth: booking hotel, detail booking, dll.
  */
 Route::controller(BookingController::class)->group(function () {
-    Route::middleware(['CekRole:1'])->group(function () {
+    Route::middleware('api', 'CekRole:1')->group(function () {
         Route::post('/bookings/setup', 'postSetupBooking')->name('setup-booking');                             // proses data mengenai hotel & kamar yang di booking, redirect ke halaman booking
     });
 

@@ -16,6 +16,14 @@ class Bookings extends Model
     public $incrementing = false;
     public $timestamps = false;
 
+    protected $fillable = [
+        'id',
+        'room_code',
+        'user_id',
+        'start_date',
+        'end_date',
+    ];
+
     public function Room()
     {
         return $this->belongsTo(Rooms::class, 'room_code', 'code');
