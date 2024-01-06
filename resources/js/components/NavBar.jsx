@@ -4,12 +4,14 @@ import {
     NavbarCollapse,
     NavbarLink,
     NavbarToggle,
+    Avatar,
 } from "flowbite-react";
 import { useState, useEffect } from "react";
 import api from "@/api";
 
 export default function NavBar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -21,6 +23,7 @@ export default function NavBar() {
                 ]);
                 if (loginCheckResponse.status === true) {
                     setIsLoggedIn(true);
+                    setUser(loginCheckResponse.user);
                 }
             } catch (error) {
                 console.log(error);
@@ -68,12 +71,28 @@ export default function NavBar() {
                 <NavbarLink href="/favourites">Favorite</NavbarLink>
                 <NavbarLink href="">Booked Hotel</NavbarLink>
                 {isLoggedIn ? (
-                    <NavbarLink
-                        className="hover:cursor-pointer"
-                        onClick={handleLogout}
-                    >
-                        Logout
-                    </NavbarLink>
+                    <>
+                        <NavbarLink
+                            className="hover:cursor-pointer"
+                            // onClick={handleLogout}
+                            href="/logout"
+                        >
+                            Logout
+                        </NavbarLink>
+                        <Avatar
+                            img="https://flowbite.com/docs/images/logo.svg"
+                            rounded
+                            size="sm"
+                            color="success"
+                        >
+                            <div className="font-medium dark:text-white">
+                                <div>{user.name}</div>
+                                <div className="text-sm text-gray-500 dark:text-gray-400">
+                                    {user.email}
+                                </div>
+                            </div>
+                        </Avatar>
+                    </>
                 ) : (
                     <>
                         <NavbarLink href="/login">Login</NavbarLink>

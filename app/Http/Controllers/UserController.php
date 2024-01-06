@@ -32,6 +32,8 @@ class UserController extends Controller
     {
         Auth::guard('User')->logout();
 
+        return redirect()->route('home-page')->with('success', 'You have been logged out successfully');
+
         return response()->json([
             'status' => (bool)true,
             'message' => 'Successfully Logged Out',

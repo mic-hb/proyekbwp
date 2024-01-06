@@ -42,6 +42,10 @@ Route::middleware(['CekRole:1'])->group(function () {
     Route::inertia('/book', 'book')->name('book-page');
 });
 
+Route::controller(UserController::class)->group(function () {
+    Route::get('/logout', 'getLogout')->name('logout');
+});
+
 Route::inertia('/coba', 'coba');
 
 

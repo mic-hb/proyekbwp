@@ -102,7 +102,7 @@ Route::controller(BookingController::class)->group(function () {
 Route::controller(UserController::class)->group(function () {
     Route::get('/profile', 'getProfilePage')->name('profile-page')->middleware(['CekRole:1']);                               // data user + list favorite & review
 
-    Route::get('/logout', 'getLogout')->name('logout');
+    // Route::get('/logout', 'getLogout')->name('logout');
     Route::post('/postLogin', 'postLogin')->name('login');
     Route::post('/postRegister', 'postRegister')->name('register');
 
