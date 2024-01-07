@@ -25,10 +25,10 @@ export default function login() {
             const loginResponse = loginRequest.data;
 
             if (loginResponse.status === true) {
-                console.log(loginResponse.message);
-                alert(loginResponse.message);
+                console.log(loginResponse);
+                // alert(loginResponse.message);
 
-                window.location.href = "/";
+                // window.location.href = "/admin";
             }
 
             if (loginResponse.message === "Unauthorized") {

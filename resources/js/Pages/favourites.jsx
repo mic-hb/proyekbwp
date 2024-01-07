@@ -41,9 +41,10 @@ export default function favourites() {
                         title={hotel.name}
                         address={hotel.address}
                         city={hotel.city_name}
-                        rating="4"
-                        price="599"
+                        rating={hotel.average_rating}
+                        price={hotel.lowest_price}
                         action="Book Now"
+                        favorite="Remove from Favourites"
                     />
                 ))}
             </div>

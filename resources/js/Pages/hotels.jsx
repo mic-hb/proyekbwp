@@ -8,6 +8,8 @@ import { Carousel } from "flowbite-react";
 export default function hotels() {
     const [isLoading, setIsLoading] = useState(true);
     const [hotels, setHotels] = useState([]);
+    const [favoriteHotels, setFavoriteHotels] = useState([]);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -18,11 +20,18 @@ export default function hotels() {
                     take: 10,
                 },
             });
-            const hotelDetailsRequest = await api.get("/hotel/H001");
+
+            const hotelFavoriteRequest = await api.get("/topFavorites", {
+                params: {
+                    skip: 0,
+                    take: 5,
+                },
+            });
 
             try {
-                const [hotelResponse] = await Promise.all([hotelRequest.data]);
+                const [hotelResponse, hotelFavoriteResponse] = await Promise.all([hotelRequest.data, hotelFavoriteRequest.data]);
                 setHotels(hotelResponse);
+                setFavoriteHotels(hotelFavoriteResponse);
             } catch (error) {
                 console.log(error);
             } finally {
@@ -38,26 +47,11 @@ export default function hotels() {
             <div className="w-full">
                 <div className="w-full h-96 p-4">
                     <Carousel pauseOnHover>
-                        <img
-                            src="https://flowbite.com/docs/images/carousel/carousel-1.svg"
-                            alt="..."
-                        />
-                        <img
-                            src="https://flowbite.com/docs/images/carousel/carousel-2.svg"
-                            alt="..."
-                        />
-                        <img
-                            src="https://flowbite.com/docs/images/carousel/carousel-3.svg"
-                            alt="..."
-                        />
-                        <img
-                            src="https://flowbite.com/docs/images/carousel/carousel-4.svg"
-                            alt="..."
-                        />
-                        <img
-                            src="https://flowbite.com/docs/images/carousel/carousel-5.svg"
-                            alt="..."
-                        />
+                        {favoriteHotels.map((hotel) => (
+                            <a key={hotel.code} href={`/hotel/${hotel.code}`}>
+                                <img src={hotel.image_urls[0]} alt="" />
+                            </a>
+                        ))}
                     </Carousel>
                 </div>
                 <main className="flex flex-col gap-4 w-full items-center">
@@ -65,13 +59,14 @@ export default function hotels() {
                         <Card
                             key={hotel.code}
                             code={hotel.code}
-                            image="https://flowbite.com/docs/images/blog/image-1.jpg"
+                            image={hotel.image_urls[0]}
                             title={hotel.name}
                             address={hotel.address}
                             city={hotel.city_name}
-                            rating="4"
-                            price="599"
+                            rating={hotel.average_rating}
+                            price={hotel.lowest_price}
                             action="Book Now"
+                            favorite="Add to Favorite"
                         />
                     ))}
                 </main>
