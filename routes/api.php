@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,6 +52,10 @@ Route::controller(MainController::class)->group(function () {
     Route::get('/topFavorites', 'getTopHotelsByFavorites');
     Route::get('/topReviews', 'getTopHotelsByReviews');
     Route::get('/randomHotels', 'getRandomHotels');
+});
+
+Route::controller(TransactionController::class)->group(function () {
+    Route::get('/hotel/{id}/transactions', 'getTransactionData');
 });
 
 Route::get('/testpassword/', function (Request $request) {
