@@ -24,11 +24,18 @@ export default function login() {
             const loginRequest = await api.post("/postLogin", credentials);
             const loginResponse = loginRequest.data;
 
-            if (loginResponse.status === true) {
-                console.log(loginResponse);
-                // alert(loginResponse.message);
+            // if (loginResponse.status === true) {
+            //     console.log(loginResponse);
+            //     // alert(loginResponse.message);
 
+            //     // window.location.href = "/admin";
+            // }
+            if (loginResponse.user.role === 0) {
                 window.location.href = "/admin";
+            }
+
+            if (loginResponse.user.role === 1) {
+                window.location.href = "/";
             }
 
             if (loginResponse.message === "Unauthorized") {
