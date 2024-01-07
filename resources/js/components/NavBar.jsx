@@ -67,13 +67,11 @@ export default function NavBar() {
             </NavbarBrand>
             <NavbarToggle />
             <NavbarCollapse>
-                <div className="flex items-center gap-10">
-                    <NavbarLink href="/hotels">Hotels</NavbarLink>
-                    <NavbarLink href="/favourites">Favorite</NavbarLink>
-                    <NavbarLink href="">Booked Hotel</NavbarLink>
-                </div>
+                <NavbarLink href="/hotels">Hotels</NavbarLink>
                 {isLoggedIn ? (
-                    <div className="flex items-center gap-8">
+                    <>
+                        <NavbarLink href="/favourites">Favorite</NavbarLink>
+                        <NavbarLink href="">Booked Hotel</NavbarLink>
                         <NavbarLink
                             className="hover:cursor-pointer"
                             // onClick={handleLogout}

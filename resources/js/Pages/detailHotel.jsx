@@ -12,6 +12,7 @@ export default function detailHotel() {
     const hotelCode = usePage().props.id;
     const [image_urls, setImage_urls] = useState([]);
     const [bookingData, setBookingData] = useState({});
+    const [bookingId, setBookingId] = useState("");
 
     const handleBooking = async (roomCode, lowest_price) => {
         setIsLoading(true);
@@ -21,10 +22,18 @@ export default function detailHotel() {
             lowest_price: lowest_price,
         });
 
-        const bookingRequest = await api.post("/bookings/setup", bookingData);
-
         try {
+            const bookingRequest = await api.post("/bookings/setup", {
+                room_type_code: roomCode,
+                hotel_code: hotel.code,
+                lowest_price: lowest_price,
+            });
             const [bookingResponse] = await Promise.all([bookingRequest.data]);
+
+            if (bookingResponse.status === true) alert(bookingResponse.message);
+            else alert(bookingResponse.message);
+
+            window.location.href = "/bookings/complete";
         } catch (error) {
             console.log(error);
         } finally {
