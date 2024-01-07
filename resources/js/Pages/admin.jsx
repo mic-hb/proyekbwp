@@ -6,6 +6,15 @@ export default function admin() {
     const [isLoading, setIsLoading] = useState(true);
     const [hotels, setHotels] = useState([]);
 
+////////////////////////////////////////////////////////
+
+    const handleShowReport = () => {
+        const selectedValue = document.getElementById('listReport').value;
+        // history.push('/invoice');
+        window.location.href = `/admin/invoice/${selectedValue}`;
+    }
+
+////////////////////////////////////////////////////////
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
@@ -134,9 +143,9 @@ export default function admin() {
                     <option value="H007">H007</option>
                     <option value="H008">H008</option>
                     <option value="H009">H009</option>
-                    <option value="H0010">H0010</option>
+                    <option value="H010">H010</option>
                 </select>
-                <button className="px-2 py-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-500 rounded-lg w-1/4 text-white mt-3">Show Report</button>
+                <button onClick={handleShowReport} className="px-2 py-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-500 rounded-lg w-1/4 text-white mt-3">Show Report</button>
             </div>
         </GeneralLayout>
     );

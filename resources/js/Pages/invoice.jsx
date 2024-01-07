@@ -1,41 +1,67 @@
 import GeneralLayout from "@/layouts/general";
 import { useState, useEffect } from "react";
 import api from "@/api";
-
+import { usePage } from "@inertiajs/react";
 export default function invoice() {
+    const hotelCode = usePage().props.id;
+    const [hotel, setHotel] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const [dataHtrans, setDataHtrans] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                const hotelDetailsRequest = await api.get(
+                    `/hotel/${hotelCode}`
+                );
+                const [hotelResponse] = await Promise.all([
+                    hotelDetailsRequest.data,
+                ]);
+                setHotel(hotelResponse[0]);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    },[]);
+
     return (
-        <GeneralLayout>
+        <GeneralLayout isLoading={isLoading}>
             <h1 className="text-3xl font-bold flex">
-                REPORT HOTEL Hotel Enak Enak
+                REPORT HOTEL {hotel.name}
             </h1>
             <div className="flex flex-col w-full gap-4 px-8 py-6 shadow-lg rounded-lg">
                 <table className="w-2/3">
                     <tr>
                         <td>Hotel Code</td>
                         <td>:</td>
-                        <td>H001</td>
+                        <td>{hotel.code}</td>
                     </tr>
                     <tr>
                         <td>Hotel Name</td>
                         <td>:</td>
-                        <td>Hotel Enak Enak</td>
+                        <td>{hotel.name}</td>
                     </tr>
                     <tr>
                         <td>City</td>
                         <td>:</td>
-                        <td>Madura</td>
+                        <td>{hotel.city_name}</td>
                     </tr>
                     <tr>
                         <td>Address</td>
                         <td>:</td>
                         <td>
-                            47062 Mortimer Groves Apt. 780 Hirthemouth, AK 66576
+                            {hotel.address}
                         </td>
                     </tr>
                     <tr>
                         <td>Number Of Transactions</td>
                         <td>:</td>
-                        <td>2</td>
+                        <td>{dataHtrans.length}</td>
                     </tr>
                 </table>
             </div>
