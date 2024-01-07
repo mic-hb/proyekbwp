@@ -32,6 +32,7 @@ class MainController extends Controller
                 ->addSelect(DB::raw('(SELECT cities.name FROM cities WHERE cities.code = hotels.city_code) as city_name'))
                 ->addSelect(DB::raw('(SELECT COUNT(favorites.hotel_code) FROM favorites WHERE favorites.hotel_code = hotels.code) as favorite_count'))
                 ->addSelect(DB::raw('(SELECT AVG(reviews.stars) FROM reviews WHERE reviews.hotel_code = hotels.code) as average_rating'))
+                ->selectRaw('(SELECT MIN(rooms.price) FROM rooms WHERE rooms.hotel_code = hotels.code AND rooms.status = 0) as lowest_price')
                 ->take($take)
                 ->skip($skip)
                 ->get();
@@ -83,14 +84,21 @@ class MainController extends Controller
         }
     }
 
-    public function getTopHotelsByFavorites()
+    public function getTopHotelsByFavorites(Request $request)
     {
         try {
+            $take = $request->query('take');
+            $skip = $request->query('skip');
+
             $result = Hotels::select('hotels.*')
                 ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
                 ->addSelect(DB::raw('(SELECT cities.name FROM cities WHERE cities.code = hotels.city_code) as city_name'))
                 ->addSelect(DB::raw('(SELECT COUNT(favorites.hotel_code) FROM favorites WHERE favorites.hotel_code = hotels.code) as favorite_count'))
+                ->addSelect(DB::raw('(SELECT AVG(reviews.stars) FROM reviews WHERE reviews.hotel_code = hotels.code) as average_rating'))
+                ->selectRaw('(SELECT MIN(rooms.price) FROM rooms WHERE rooms.hotel_code = hotels.code AND rooms.status = 0) as lowest_price')
                 ->orderBy('favorite_count', 'DESC')
+                ->take($take)
+                ->skip($skip)
                 ->get();
 
             //
@@ -103,15 +111,21 @@ class MainController extends Controller
         }
     }
 
-    public function getTopHotelsByReviews()
+    public function getTopHotelsByReviews(Request $request)
     {
         try {
+            $take = $request->query('take');
+            $skip = $request->query('skip');
+
             $result = Hotels::select('hotels.*')
                 ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
                 ->addSelect(DB::raw('(SELECT cities.name FROM cities WHERE cities.code = hotels.city_code) as city_name'))
                 ->addSelect(DB::raw('(SELECT COUNT(reviews.hotel_code) FROM reviews WHERE reviews.hotel_code = hotels.code) as review_count'))
                 ->addSelect(DB::raw('(SELECT AVG(reviews.stars) FROM reviews WHERE reviews.hotel_code = hotels.code) as average_rating'))
+                ->selectRaw('(SELECT MIN(rooms.price) FROM rooms WHERE rooms.hotel_code = hotels.code AND rooms.status = 0) as lowest_price')
                 ->orderBy('average_rating', 'DESC')
+                ->take($take)
+                ->skip($skip)
                 ->get();
 
             return response()->json($result, 200);

@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::get('/test', function () {
     try {
         // session(['key' => 'value']);
         // return session('key');
+        Session::forget('booking_data');
         dd(session()->all());
         return Auth::user();
 
@@ -86,6 +88,9 @@ Route::controller(MainController::class, 'getHomePage')->group(function () {
 Route::controller(BookingController::class)->group(function () {
     Route::middleware('api', 'CekRole:1')->group(function () {
         Route::post('/bookings/setup', 'postSetupBooking')->name('setup-booking');                             // proses data mengenai hotel & kamar yang di booking, redirect ke halaman booking
+        Route::post('/bookings/confirm', 'postConfirmBooking')->name('confirm-booking');                             // proses data mengenai hotel & kamar yang di booking, redirect ke halaman booking
+        Route::get('/bookings/data', 'getBookingData')->name('booking-data');                             // proses data mengenai hotel & kamar yang di booking, redirect ke halaman booking
+        Route::get('/bookings/cancel', 'getCancelBooking')->name('cancel-booking');                             // proses data mengenai hotel & kamar yang di booking, redirect ke halaman booking
     });
 
     // Route::get('hotels/book/{booking_token}', 'getBookingProcessPage')->name('book-hotel-page');            // halaman booking, user mengisi data diri, tanggal, dll.
@@ -116,7 +121,6 @@ Route::controller(UserController::class)->group(function () {
 Route::controller(AdminController::class)->group(function () {
     Route::middleware(['CekRole:0'])->group(function () {
         Route::prefix('admin')->group(function () {
-            Route::get('/', 'getAdminPage')->name('admin-page');
             Route::post('/proses', 'doProses')->name('doProses');
             Route::post('/delete', 'doDelete')->name('doDelete');
         });

@@ -7,15 +7,90 @@ use App\Models\Rooms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class BookingController extends Controller
 {
-    public function getBookingProcessPage(Request $request)
+    public function getBookingData(Request $request)
     {
+        if (Session::has('booking_data')) {
+            return response()->json([
+                'status' => (bool)true,
+                'data' => Session::get('booking_data'),
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => (bool)false,
+                'message' => 'You have no pending booking data',
+            ], 404);
+        }
     }
 
-    public function postBookingProcess(Request $request)
+    public function getCancelBooking(Request $request)
     {
+        if (Session::has('booking_data')) {
+            Session::forget('booking_data');
+
+            return response()->json([
+                'status' => (bool)true,
+                'message' => 'Your booking has been cancelled',
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => (bool)false,
+                'message' => 'You have no pending booking data',
+            ], 404);
+        }
+    }
+
+    public function postConfirmBooking(Request $request)
+    {
+        try {
+            $user_id = $request->user_id;
+            $hotel_code = $request->hotel_code;
+            $room_code = $request->room_code;
+            $room_type_code = $request->room_type_code;
+            $lowest_price = $request->lowest_price;
+            $start_date = $request->start_date;
+            $end_date = $request->end_date;
+
+            // Cek apakah room type tersedia
+            $room = Rooms::where('code', '=', $room_code)
+                ->where('hotel_code', '=', $hotel_code)
+                ->where('room_types_code', '=', $room_type_code)
+                ->where('price', '=', $lowest_price)
+                ->where('status', '=', 0)
+                ->firstOrFail();
+
+            if ($room == null) {
+                return response()->json([
+                    'message' => 'Room is no longer available',
+                ], 404);
+            }
+
+            $room->status = 1;
+
+            $result = Bookings::create([
+                'id' => 'B' . str_pad((DB::connection('db_hotel_connection')->table('bookings')->count() + 1), 3, '0', STR_PAD_LEFT),
+                'room_code' => $room->code,
+                'user_id' => $user_id,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+            ]);
+
+            $room->save();
+            Session::forget('booking_data');
+
+            return response()->json([
+                'status' => (bool)true,
+                'message' => 'Success!',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => (bool)false,
+                'message' => $th->getMessage(),
+            ], 501);
+        }
     }
 
     public function postSetupBooking(Request $request)
@@ -24,9 +99,9 @@ class BookingController extends Controller
             // TODO: isi Validasi
 
 
-            $hotel_code = $request->input('hotel_code');
-            $room_type_code = $request->input('room_type_code');
-            $lowest_price = $request->input('lowest_price');
+            $hotel_code = $request->hotel_code;
+            $room_type_code = $request->room_type_code;
+            $lowest_price = $request->lowest_price;
 
             // Cek apakah room type tersedia
             $room = Rooms::where('room_types_code', '=', $room_type_code)
@@ -41,30 +116,31 @@ class BookingController extends Controller
                 ], 404);
             }
 
-            $room->status = 1;
+            $room_code = $room->code;
 
-            $result = Bookings::create([
-                'id' => 'B' . str_pad((DB::connection('db_hotel_connection')->table('bookings')->count() + 1), 3, '0', STR_PAD_LEFT),
-                'room_code' => $room->code,
-                'user_id' => Auth::guard('User')->user()->id,
-                'start_date' => now(),
-                'end_date' => now()->addDays(2),
-                // 'start_date' => $request->input('start_date'),
-                // 'end_date' => $request->input('end_date'),
-            ]);
-
-            $room->save();
+            if (Session::has('booking_data')) {
+                return response()->json([
+                    'status' => (bool)false,
+                    'message' => 'You already have a booking'
+                ]);
+            }
 
             // TODO: Pass data to frontend
 
-            if ($result) {
-                return response()->json([
-                    'message' => 'Reservation success',
-                    'booking_id' => $result->id,
-                ], 200);
-            }
+            Session::put('booking_data', [
+                'hotelCode' => $hotel_code,
+                'roomTypeCode' => $room_type_code,
+                'roomCode' => $room_code,
+                'lowestPrice' => $lowest_price,
+            ]);
+
+            return response()->json([
+                'status' => (bool)true,
+                'message' => 'Please confirm your booking!',
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
+                'status' => (bool)false,
                 'message' => $th->getMessage(),
             ], 501);
         }
