@@ -69,7 +69,7 @@ export default function NavBar() {
             <NavbarCollapse>
                 <NavbarLink href="/hotels">Hotels</NavbarLink>
                 {isLoggedIn ? (
-                    <>
+                    <div>
                         <NavbarLink href="/favourites">Favorite</NavbarLink>
                         <NavbarLink href="">Booked Hotel</NavbarLink>
                         <NavbarLink
