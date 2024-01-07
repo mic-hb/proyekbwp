@@ -28,7 +28,7 @@ export default function login() {
                 console.log(loginResponse);
                 // alert(loginResponse.message);
 
-                // window.location.href = "/admin";
+                window.location.href = "/admin";
             }
 
             if (loginResponse.message === "Unauthorized") {

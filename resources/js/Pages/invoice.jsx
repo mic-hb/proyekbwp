@@ -27,14 +27,14 @@ export default function invoice() {
         };
 
         fetchData();
-    },[]);
+    }, []);
 
     return (
         <GeneralLayout isLoading={isLoading}>
             <h1 className="text-3xl font-bold flex">
                 REPORT HOTEL {hotel.name}
             </h1>
-            <div className="flex flex-col w-full gap-4 px-8 py-6 shadow-lg rounded-lg">
+            <div className="flex flex-col w-full gap-4 px-8 py-6 shadow-lg rounded-lg hover:font-semibold hover:scale-110 transition-all ease-in-out duration-300">
                 <table className="w-2/3">
                     <tr>
                         <td>Hotel Code</td>
@@ -54,9 +54,7 @@ export default function invoice() {
                     <tr>
                         <td>Address</td>
                         <td>:</td>
-                        <td>
-                            {hotel.address}
-                        </td>
+                        <td>{hotel.address}</td>
                     </tr>
                     <tr>
                         <td>Number Of Transactions</td>
@@ -66,7 +64,7 @@ export default function invoice() {
                 </table>
             </div>
 
-            <h1 className="text-3xl font-bold flex justify-center mt-5">
+            <h1 className="text-3xl font-bold flex justify-center mt-4">
                 INVOICE
             </h1>
             <div className="flex flex-col w-full gap-4 px-8 py-6 shadow-lg rounded-lg bg-slate-400 mt-5">
@@ -208,7 +206,7 @@ export default function invoice() {
                             </tr>
                         </tbody>
                     </table>
-                    <table className="w-1/4">
+                    <table className="w-1/3">
                         <tr>
                             <td>Total</td>
                             <td>:</td>
