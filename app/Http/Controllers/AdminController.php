@@ -20,10 +20,10 @@ class AdminController extends Controller
             $validator = Validator::make($request->all(), $rules);
 
             if ($validator->fails()) {
-                return response()->json(['errors'=>$validator->errors()]);
+                return response()->json(['errors' => $validator->errors()]);
             }
 
-            $code = Hotels::all()->count() + 1;
+            $code = Hotels::all()->count() + 2;
             $formattedCode = 'H' . str_pad($code, 3, '0', STR_PAD_LEFT);
             $result = Hotels::create([
                 "code" => $formattedCode,
@@ -32,9 +32,19 @@ class AdminController extends Controller
                 "address" => $request->address,
             ]);
             if ($result) {
-                return back()->with('pesan', 'sukses');
+                return response(
+                    [
+                        'status' => (bool)true,
+                        'message' => 'Data berhasil ditambahkan',
+                    ]
+                );
             } else {
-                return back()->with('pesan', 'gagal');
+                return response(
+                    [
+                        'status' => (bool)false,
+                        'message' => 'Data gagal ditambahkan',
+                    ]
+                );
             }
         } else if ($request->has('btnUpdate')) {
             $rules = [
@@ -42,13 +52,13 @@ class AdminController extends Controller
                 'city_code' => 'required|alpha_num',
                 'name' => 'required',
                 'address' => 'required',
-                'status' => 'nullable',
+                // 'status' => 'nullable',
             ];
 
             $validator = Validator::make($request->all(), $rules);
 
             if ($validator->fails()) {
-                return response()->json(['errors'=>$validator->errors()]);
+                return response()->json(['errors' => $validator->errors()]);
             }
 
             $item = Hotels::find($request->code);
@@ -56,9 +66,23 @@ class AdminController extends Controller
                 "name" => $request->name,
                 "city_code" => $request->city_code,
                 "address" => $request->address,
-                "status" => $request->status,
+                // "status" => $request->status,
             ]);
-            return back()->with('pesan, sukses');
+            if ($result) {
+                return response(
+                    [
+                        'status' => (bool)true,
+                        'message' => 'Data berhasil diubah',
+                    ]
+                );
+            } else {
+                return response(
+                    [
+                        'status' => (bool)false,
+                        'message' => 'Data gagal diubah',
+                    ]
+                );
+            }
         }
     }
 
@@ -71,11 +95,16 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return response()->json(['errors'=>$validator->errors()]);
+            return response()->json(['errors' => $validator->errors()]);
         }
 
         $item = Hotels::withTrashed()->find($request->code);
         $item->trashed() == true ? $item->restore() : $item->delete();
-        return back()->with('pesan, sukses');
+        return response(
+            [
+                'status' => (bool)true,
+                'message' => 'Data berhasil didelete',
+            ]
+        );
     }
 }

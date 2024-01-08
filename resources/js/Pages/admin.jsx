@@ -19,6 +19,7 @@ export default function admin() {
     const hotelNameRef = useRef();
     const hotelAddressRef = useRef();
     const hotelCityRef = useRef();
+    const deleteIDRef = useRef();
 
     ////////////////////////////////////////////////////////
 
@@ -71,10 +72,56 @@ export default function admin() {
 
         fetchData();
     }, []);
+
+    const handleInsert = async () => {
+        const insertRequest = await api.post("/admin/proses", {
+            btnInsert: null,
+            city_code: hotelCityRef.current.value,
+            code: hotelCodeRef.current.value,
+            name: hotelNameRef.current.value,
+            address: hotelAddressRef.current.value,
+        });
+        const insertResponse = insertRequest.data;
+
+        if (insertResponse.status === true) {
+            alert(insertResponse.message);
+            window.location.href = "/admin";
+        }
+    };
+
+    const handleUpdate = async () => {
+        const updateRequest = await api.post("/admin/proses", {
+            btnUpdate: null,
+            city_code: hotelCityRef.current.value,
+            code: hotelCodeRef.current.value,
+            name: hotelNameRef.current.value,
+            address: hotelAddressRef.current.value,
+        });
+        const updateResponse = updateRequest.data;
+
+        if (updateResponse.status === true) {
+            alert(updateResponse.message);
+            window.location.href = "/admin";
+        }
+    };
+
+    const handleDelete = async (index) => {
+        const deleteRequest = await api.post("/admin/delete", {
+            btnDelete: null,
+            code: document.getElementById(index).innerHTML,
+        });
+        const deleteResponse = deleteRequest.data;
+
+        if (deleteResponse.status === true) {
+            alert(deleteResponse.message);
+            window.location.href = "/admin";
+        }
+    };
+
     return (
         <GeneralLayout isLoading={isLoading}>
             <h1 className="text-3xl font-bold">Master Hotel</h1>
-            <form
+            <div
                 action="#"
                 method="post"
                 className="flex flex-col w-full gap-2 shadow-lg px-8 py-6 rounded-lg"
@@ -113,19 +160,19 @@ export default function admin() {
                 />
                 <div className="flex w-full gap-2">
                     <button
-                        type="submit"
+                        onClick={handleInsert}
                         className="px-2 py-1 bg-blue-400 rounded-lg w-1/2"
                     >
                         Insert
                     </button>
                     <button
-                        type="submit"
+                        onClick={handleUpdate}
                         className="px-2 py-1 bg-green-400 rounded-lg w-1/2"
                     >
                         Update
                     </button>
                 </div>
-            </form>
+            </div>
 
             <div className="py-8">
                 <Table hoverable>
@@ -156,13 +203,13 @@ export default function admin() {
                                 </td>
                             </tr>
                         ))} */}
-                        {hotels.map((hotel) => (
+                        {hotels.map((hotel, index) => (
                             <TableRow
                                 key={hotel.code}
                                 onDoubleClick={() => clickRow(hotel)}
                                 className="bg-white cursor-pointer dark:border-gray-700 dark:bg-gray-800"
                             >
-                                <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                <TableCell id={index} className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                     {hotel.code}
                                 </TableCell>
                                 <TableCell>{hotel.name}</TableCell>
@@ -170,17 +217,11 @@ export default function admin() {
                                 <TableCell>{hotel.city_name}</TableCell>
                                 <TableCell>
                                     <button
-                                        type="submit"
+                                        onClick={() => handleDelete(index)}
                                         className="px-2 py-1 bg-red-400 rounded-lg w-fit"
                                     >
                                         Delete
                                     </button>
-                                    {/* <a
-                                        href="#"
-                                        className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                                    >
-                                        Edit
-                                    </a> */}
                                 </TableCell>
                             </TableRow>
                         ))}
