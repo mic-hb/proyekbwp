@@ -15,6 +15,13 @@ class Dtrans_hotel extends Model
     public $incrementing = false;
     public $timestamps = false;
 
+    protected $fillable = [
+        'id',
+        'htrans_id',
+        'booking_id',
+        'subtotal',
+    ];
+
     public function Htrans()
     {
         return $this->belongsTo(Htrans_hotel::class, 'htrans_id', 'id');

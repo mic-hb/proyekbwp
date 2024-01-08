@@ -15,6 +15,7 @@ import { useState, useEffect, useRef } from "react";
 export default function admin() {
     const [isLoading, setIsLoading] = useState(true);
     const [hotels, setHotels] = useState([]);
+    const [cities, setCities] = useState([]);
     const hotelCodeRef = useRef();
     const hotelNameRef = useRef();
     const hotelAddressRef = useRef();
@@ -34,7 +35,8 @@ export default function admin() {
         hotelCodeRef.current.value = code;
         hotelNameRef.current.value = name;
         hotelAddressRef.current.value = address;
-        hotelCityRef.current.value = city_name;
+        // hotelCityRef.current.value = city_name;
+        document.getElementById("selectCity").val = city_name;
     };
 
     // TODO: useRef di setiap input
@@ -60,9 +62,19 @@ export default function admin() {
                     take: 9999,
                 },
             });
+            const citiesRequest = await api.get("/allCities", {
+                params: {
+                    skip: 0,
+                    take: 9999,
+                },
+            });
             try {
                 const [hotelResponse] = await Promise.all([hotelRequest.data]);
+                const [citiesResponse] = await Promise.all([
+                    citiesRequest.data,
+                ]);
                 setHotels(hotelResponse);
+                setCities(citiesResponse);
             } catch (error) {
                 console.log(error);
             } finally {
@@ -82,7 +94,8 @@ export default function admin() {
             "/admin/proses",
             {
                 btnInsert: null,
-                city_code: hotelCityRef.current.value,
+                // city_code: hotelCityRef.current.value,
+                city_code: document.getElementById("selectCity").val,
                 code: hotelCodeRef.current.value,
                 name: hotelNameRef.current.value,
                 address: hotelAddressRef.current.value,
@@ -112,7 +125,8 @@ export default function admin() {
             "/admin/proses",
             {
                 btnUpdate: null,
-                city_code: hotelCityRef.current.value,
+                // city_code: hotelCityRef.current.value,
+                city_code: document.getElementById("selectCity").val,
                 code: hotelCodeRef.current.value,
                 name: hotelNameRef.current.value,
                 address: hotelAddressRef.current.value,
@@ -190,13 +204,20 @@ export default function admin() {
                     ref={hotelAddressRef}
                 />
                 <label htmlFor="">Hotel City</label>
-                <input
+                {/* <input
                     type="text"
                     name="hotel_city"
                     id="hotel_city"
                     className="rounded-lg px-2 py-1"
                     ref={hotelCityRef}
-                />
+                /> */}
+                <select name="" id="selectCity">
+                    {cities.map((city) => (
+                        <option key={city.code} value={city.code}>
+                            {city.name}
+                        </option>
+                    ))}
+                </select>
                 <div className="flex w-full gap-2">
                     <button
                         onClick={handleInsert}

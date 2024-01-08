@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bookings;
+use App\Models\Dtrans_hotel;
+use App\Models\Htrans_hotel;
 use App\Models\Rooms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -70,12 +72,28 @@ class BookingController extends Controller
 
             $room->status = 1;
 
+            $booking_id = 'B' . str_pad((DB::connection('db_hotel_connection')->table('bookings')->count() + 1), 3, '0', STR_PAD_LEFT);
             $result = Bookings::create([
-                'id' => 'B' . str_pad((DB::connection('db_hotel_connection')->table('bookings')->count() + 1), 3, '0', STR_PAD_LEFT),
+                'id' => $booking_id,
                 'room_code' => $room->code,
                 'user_id' => $user_id,
                 'start_date' => $start_date,
                 'end_date' => $end_date,
+            ]);
+
+            $htrans_id = 'HT' . str_pad((DB::connection('db_hotel_connection')->table('htrans_hotel')->count() + 1), 3, '0', STR_PAD_LEFT);
+            $result = Htrans_hotel::create([
+                'id' => $htrans_id,
+                'user_id' => $user_id,
+                'date' => now(),
+                'total' => $lowest_price,
+            ]);
+
+            $result = Dtrans_hotel::create([
+                'id' => 'DT' . str_pad((DB::connection('db_hotel_connection')->table('dtrans_hotel')->count() + 1), 3, '0', STR_PAD_LEFT),
+                'htrans_id' => $htrans_id,
+                'booking_id' => $booking_id,
+                'subtotal' => $lowest_price,
             ]);
 
             $room->save();

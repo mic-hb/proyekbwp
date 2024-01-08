@@ -67,9 +67,11 @@ export default function NavBar() {
             </NavbarBrand>
             <NavbarToggle />
             <NavbarCollapse>
-                <NavbarLink href="/hotels">Hotels</NavbarLink>
+                <div className="flex items-center">
+                    <NavbarLink href="/hotels">Hotels</NavbarLink>
+                </div>
                 {isLoggedIn ? (
-                    <div>
+                    <div className="flex items-center gap-4">
                         <NavbarLink href="/favourites">Favorite</NavbarLink>
                         <NavbarLink href="">Booked Hotel</NavbarLink>
                         <NavbarLink

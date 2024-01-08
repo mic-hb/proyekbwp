@@ -46,6 +46,7 @@ Route::get('/test', function () {
 });
 
 Route::controller(MainController::class)->group(function () {
+    Route::get('/allCities', 'getAllCities');
     Route::get('/allHotels', 'getAllHotels');
     Route::get('/hotel/{id}', 'getHotelById');
     Route::get('/hotel/{id}/rooms', 'getRoomsByHotelCode');

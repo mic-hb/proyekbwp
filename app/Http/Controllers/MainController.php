@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cities;
 use App\Models\Hotels;
 use App\Models\Images_hotels;
 use App\Models\Images_rooms;
@@ -14,6 +15,28 @@ use Inertia\Inertia;
 
 class MainController extends Controller
 {
+    public function getAllCities(Request $request)
+    {
+        try {
+            $take = $request->query('take');
+            $skip = $request->query('skip');
+
+            $result = Cities::select('cities.*')
+                ->take($take)
+                ->skip($skip)
+                ->get();
+
+            return response()->json(
+                $result,
+                200
+            );
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage(),
+            ], 404);
+        }
+    }
+
     public function getAllHotels(Request $request)
     {
         try {

@@ -15,6 +15,13 @@ class Htrans_hotel extends Model
     public $incrementing = false;
     public $timestamps = false;
 
+    protected $fillable = [
+        'id',
+        'user_id',
+        'date',
+        'total',
+    ];
+
     public function Dtrans()
     {
         return $this->hasMany(Dtrans_hotel::class, 'htrans_id', 'id');
