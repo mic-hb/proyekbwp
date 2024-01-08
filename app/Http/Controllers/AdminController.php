@@ -10,6 +10,7 @@ class AdminController extends Controller
 {
     public function doProses(Request $request)
     {
+
         if ($request->has('btnInsert')) {
             $rules = [
                 'city_code' => 'required|alpha_num',
@@ -99,12 +100,22 @@ class AdminController extends Controller
         }
 
         $item = Hotels::withTrashed()->find($request->code);
-        $item->trashed() == true ? $item->restore() : $item->delete();
-        return response(
-            [
-                'status' => (bool)true,
-                'message' => 'Data berhasil didelete',
-            ]
-        );
+        if ($item->trashed() == true) {
+            $item->restore();
+            return response(
+                [
+                    'status' => (bool)true,
+                    'message' => 'Data berhasil direstore',
+                ]
+            );
+        } else {
+            $item->delete();
+            return response(
+                [
+                    'status' => (bool)true,
+                    'message' => 'Data berhasil didelete',
+                ]
+            );
+        }
     }
 }

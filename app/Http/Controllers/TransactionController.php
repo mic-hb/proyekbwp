@@ -33,6 +33,22 @@ class TransactionController extends Controller
                             FROM users WHERE users.id = htrans_hotel.user_id
                             LIMIT 1
                         ),
+                        "details", (
+                            SELECT JSON_ARRAYAGG(JSON_OBJECT(
+                                "id", dtrans_hotel.id,
+                                "user", users.name,
+                                "roomType", room_types.name,
+                                "startDate", bookings.start_date,
+                                "endDate", bookings.end_date,
+                                "subtotal", dtrans_hotel.subtotal
+                            ))
+                            FROM dtrans_hotel
+                            JOIN bookings ON bookings.id = dtrans_hotel.booking_id
+                            JOIN users ON users.id = bookings.user_id
+                            JOIN rooms ON rooms.code = bookings.room_code
+                            JOIN room_types ON room_types.code = rooms.room_types_code
+                            WHERE dtrans_hotel.htrans_id = htrans_hotel.id
+                        ),
                         "date", htrans_hotel.date,
                         "total", htrans_hotel.total))
                     FROM htrans_hotel

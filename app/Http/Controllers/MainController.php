@@ -26,7 +26,8 @@ class MainController extends Controller
             //     ->skip($skip)
             //     ->get();
 
-            $result = Hotels::select('hotels.*')
+            $result = Hotels::withTrashed()
+                ->select('hotels.*')
                 // ->with('City')
                 ->addSelect(DB::raw('(SELECT JSON_ARRAYAGG(images.url) FROM images_hotels AS images WHERE images.hotel_code = hotels.code) as image_urls'))
                 ->addSelect(DB::raw('(SELECT cities.name FROM cities WHERE cities.code = hotels.city_code) as city_name'))

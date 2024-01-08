@@ -38,23 +38,19 @@ Route::inertia('/login', 'login')->name('login-page');
 Route::inertia('/register', 'register')->name('register-page');
 Route::get('/logout', [UserController::class, 'getLogout'])->name('logout');
 
-Route::inertia('/admin', 'admin')->name('admin-page');
-// Route::inertia('/invoice', 'invoice')->name('invoice-page');
-Route::get('/admin/invoice/{id}', function ($id) {
-    return Inertia::render('invoice', [
-        'id' => $id,
-    ]);
-})->name('invoice-page');
-
 Route::middleware(['CekRole:1'])->group(function () {
     Route::inertia('/favourites', 'favourites')->name('favourites-page');
     Route::inertia('/bookings/complete', 'book')->name('book-page');
 });
 
 Route::middleware(['CekRole:0'])->group(function () {
-    
 });
 Route::inertia('/admin', 'admin')->name('admin-page');
+Route::get('/admin/invoice/{id}', function ($id) {
+    return Inertia::render('invoice', [
+        'id' => $id,
+    ]);
+})->name('invoice-page');
 
 
 

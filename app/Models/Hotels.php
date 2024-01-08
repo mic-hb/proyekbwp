@@ -50,6 +50,7 @@ class Hotels extends Model
         'image_urls' => 'json',
         'transactions' => 'json',
         'user' => 'json',
+        'details' => 'json',
     ];
 
     public function getImagesAttribute()

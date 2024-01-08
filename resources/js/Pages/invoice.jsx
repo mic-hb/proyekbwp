@@ -102,8 +102,12 @@ export default function invoice() {
                         <table className="w-full justify-center text-center items-center">
                             <thead>
                                 <tr>
+                                    <th className="border border-black">No.</th>
                                     <th className="border border-black">
-                                        Room Code
+                                        DTrans ID
+                                    </th>
+                                    <th className="border border-black">
+                                        Customer
                                     </th>
                                     <th className="border border-black">
                                         Room Type
@@ -120,15 +124,31 @@ export default function invoice() {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td className="border border-black">
-                                        R001
-                                    </td>
-                                    <td className="border border-black">DLX</td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                    <td className="border border-black"></td>
-                                </tr>
+                                {invoice.details.map((detail, index) => (
+                                    <tr>
+                                        <td className="border border-black">
+                                            {index + 1}
+                                        </td>
+                                        <td className="border border-black">
+                                            {detail.id}
+                                        </td>
+                                        <td className="border border-black">
+                                            {detail.user}
+                                        </td>
+                                        <td className="border border-black">
+                                            {detail.roomType}
+                                        </td>
+                                        <td className="border border-black">
+                                            {detail.startDate}
+                                        </td>
+                                        <td className="border border-black">
+                                            {detail.endDate}
+                                        </td>
+                                        <td className="border border-black">
+                                            Rp. {detail.subtotal}
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                         <table className="w-1/2">

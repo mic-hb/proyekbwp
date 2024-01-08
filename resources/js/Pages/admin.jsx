@@ -74,14 +74,28 @@ export default function admin() {
     }, []);
 
     const handleInsert = async () => {
-        const insertRequest = await api.post("/admin/proses", {
-            btnInsert: null,
-            city_code: hotelCityRef.current.value,
-            code: hotelCodeRef.current.value,
-            name: hotelNameRef.current.value,
-            address: hotelAddressRef.current.value,
-        });
+        const csrfToken = document.head.querySelector(
+            'meta[name="csrf-token"]'
+        ).content;
+        console.log(csrfToken);
+        const insertRequest = await api.post(
+            "/admin/proses",
+            {
+                btnInsert: null,
+                city_code: hotelCityRef.current.value,
+                code: hotelCodeRef.current.value,
+                name: hotelNameRef.current.value,
+                address: hotelAddressRef.current.value,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+            }
+        );
         const insertResponse = insertRequest.data;
+        console.log(insertRequest);
 
         if (insertResponse.status === true) {
             alert(insertResponse.message);
@@ -90,13 +104,26 @@ export default function admin() {
     };
 
     const handleUpdate = async () => {
-        const updateRequest = await api.post("/admin/proses", {
-            btnUpdate: null,
-            city_code: hotelCityRef.current.value,
-            code: hotelCodeRef.current.value,
-            name: hotelNameRef.current.value,
-            address: hotelAddressRef.current.value,
-        });
+        const csrfToken = document.head.querySelector(
+            'meta[name="csrf-token"]'
+        ).content;
+        console.log(csrfToken);
+        const updateRequest = await api.post(
+            "/admin/proses",
+            {
+                btnUpdate: null,
+                city_code: hotelCityRef.current.value,
+                code: hotelCodeRef.current.value,
+                name: hotelNameRef.current.value,
+                address: hotelAddressRef.current.value,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+            }
+        );
         const updateResponse = updateRequest.data;
 
         if (updateResponse.status === true) {
@@ -106,10 +133,22 @@ export default function admin() {
     };
 
     const handleDelete = async (index) => {
-        const deleteRequest = await api.post("/admin/delete", {
-            btnDelete: null,
-            code: document.getElementById(index).innerHTML,
-        });
+        const csrfToken = document.head.querySelector(
+            'meta[name="csrf-token"]'
+        ).content;
+        console.log(csrfToken);
+        const deleteRequest = await api.post(
+            "/admin/delete",
+            {
+                code: document.getElementById(index).innerHTML,
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+            }
+        );
         const deleteResponse = deleteRequest.data;
 
         if (deleteResponse.status === true) {
@@ -209,19 +248,31 @@ export default function admin() {
                                 onDoubleClick={() => clickRow(hotel)}
                                 className="bg-white cursor-pointer dark:border-gray-700 dark:bg-gray-800"
                             >
-                                <TableCell id={index} className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                <TableCell
+                                    id={index}
+                                    className="whitespace-nowrap font-medium text-gray-900 dark:text-white"
+                                >
                                     {hotel.code}
                                 </TableCell>
                                 <TableCell>{hotel.name}</TableCell>
                                 <TableCell>{hotel.address}</TableCell>
                                 <TableCell>{hotel.city_name}</TableCell>
                                 <TableCell>
-                                    <button
-                                        onClick={() => handleDelete(index)}
-                                        className="px-2 py-1 bg-red-400 rounded-lg w-fit"
-                                    >
-                                        Delete
-                                    </button>
+                                    {hotel.deleted_at === null ? (
+                                        <button
+                                            onClick={() => handleDelete(index)}
+                                            className="px-2 py-1 bg-red-400 rounded-lg w-fit"
+                                        >
+                                            Delete
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={() => handleDelete(index)}
+                                            className="px-2 py-1 bg-blue-400 rounded-lg w-fit"
+                                        >
+                                            Restore
+                                        </button>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ))}
