@@ -26,25 +26,25 @@ export default function footer() {
                     <div className="mt-4 flex space-x-6 sm:mt-0 sm:justify-center">
                         <FooterCard
                             image={
-                                "https://pmb.istts.ac.id/manajemen/_image/calonmhs/223226/223226%20K02.jpg"
+                                "melvin.jpg"
                             }
                             link={"https://www.instagram.com/melvinn.s22/"}
                         />
                         <FooterCard
                             image={
-                                "https://pmb.istts.ac.id/manajemen/_image/calonmhs/223206/223206%20K02.jpg"
+                                "mb.jpg"
                             }
                             link={"https://www.instagram.com/michael_hamonangan/"}
                         />
                         <FooterCard
                             image={
-                                "https://pmb.istts.ac.id/manajemen/_image/calonmhs/223120/223120%20K02.jpg"
+                                "leon.jpg"
                             }
                             link={"https://www.instagram.com/leonwidjaja_/"}
                         />
                         <FooterCard
                             image={
-                                "https://pmb.istts.ac.id/manajemen/_image/calonmhs/223010/223010%20K02.jpg"
+                                "matthew.jpg"
                             }
                             link={"https://www.instagram.com/rafathew/"}
                         />
