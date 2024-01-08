@@ -48,10 +48,17 @@ class Hotels extends Model
 
     protected $casts = [
         'image_urls' => 'json',
+        'transactions' => 'json',
+        'user' => 'json',
     ];
 
     public function getImagesAttribute()
     {
         return $this->Images()->pluck('url')->toArray();
     }
+
+    // public function getTransactionAttribute()
+    // {
+    //     return $this->Images()->pluck('url')->toArray();
+    // }
 }

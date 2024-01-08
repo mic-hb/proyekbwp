@@ -10,22 +10,31 @@ import {
     Label,
     Select,
 } from "flowbite-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function admin() {
     const [isLoading, setIsLoading] = useState(true);
     const [hotels, setHotels] = useState([]);
+    const hotelCodeRef = useRef();
+    const hotelNameRef = useRef();
+    const hotelAddressRef = useRef();
+    const hotelCityRef = useRef();
 
     ////////////////////////////////////////////////////////
 
-    const clickRow = ({code,name,address,city_name}) => {
+    const clickRow = ({ code, name, address, city_name }) => {
         console.log({
             code,
             name,
             address,
-            city_name
+            city_name,
         });
-    }
+
+        hotelCodeRef.current.value = code;
+        hotelNameRef.current.value = name;
+        hotelAddressRef.current.value = address;
+        hotelCityRef.current.value = city_name;
+    };
 
     // TODO: useRef di setiap input
     // TODO: kasi onclick di table row
@@ -76,6 +85,7 @@ export default function admin() {
                     name="hotel_code"
                     id="hotel_code"
                     className="rounded-lg px-2 py-1"
+                    ref={hotelCodeRef}
                 />
                 <label htmlFor="">Hotel Name</label>
                 <input
@@ -83,6 +93,7 @@ export default function admin() {
                     name="hotel_name"
                     id="hotel_name"
                     className="rounded-lg px-2 py-1"
+                    ref={hotelNameRef}
                 />
                 <label htmlFor="">Hotel Address</label>
                 <input
@@ -90,6 +101,7 @@ export default function admin() {
                     name="hotel_address"
                     id="hotel_address"
                     className="rounded-lg px-2 py-1"
+                    ref={hotelAddressRef}
                 />
                 <label htmlFor="">Hotel City</label>
                 <input
@@ -97,6 +109,7 @@ export default function admin() {
                     name="hotel_city"
                     id="hotel_city"
                     className="rounded-lg px-2 py-1"
+                    ref={hotelCityRef}
                 />
                 <div className="flex w-full gap-2">
                     <button
@@ -139,7 +152,7 @@ export default function admin() {
                                     {hotel.city_name}
                                 </td>
                                 <td className="border border-black px-2 py-1">
-                                    
+
                                 </td>
                             </tr>
                         ))} */}
@@ -189,18 +202,18 @@ export default function admin() {
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                 </tbody>
             </table> */}
 
             <div className="flex flex-col w-full py-8 space-x-10 justify-center">
                 <h1 className="text-2xl font-bold">Report Hotel</h1>
                 <Select id="listReport" name="report" required>
-                    {
-                        hotels.map((hotel) => (
-                            <option key={hotel.code} value={hotel.code}>{hotel.code} - {hotel.name}</option>
-                        ))
-                    }
+                    {hotels.map((hotel) => (
+                        <option key={hotel.code} value={hotel.code}>
+                            {hotel.code} - {hotel.name}
+                        </option>
+                    ))}
                 </Select>
                 {/* <select name="report" id="listReport" className="w-1/5 mt-3">
                     <option value="H001">H001</option>
