@@ -44,13 +44,13 @@ Route::middleware(['CekRole:1'])->group(function () {
 });
 
 Route::middleware(['CekRole:0'])->group(function () {
+    Route::inertia('/admin', 'admin')->name('admin-page');
+    Route::get('/admin/invoice/{id}', function ($id) {
+        return Inertia::render('invoice', [
+            'id' => $id,
+        ]);
+    })->name('invoice-page');
 });
-Route::inertia('/admin', 'admin')->name('admin-page');
-Route::get('/admin/invoice/{id}', function ($id) {
-    return Inertia::render('invoice', [
-        'id' => $id,
-    ]);
-})->name('invoice-page');
 
 
 

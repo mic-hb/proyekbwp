@@ -126,10 +126,10 @@ Route::controller(UserController::class)->group(function () {
  */
 Route::controller(AdminController::class)->group(function () {
     Route::middleware(['CekRole:0'])->group(function () {
-    });
-    Route::prefix('admin')->group(function () {
-        Route::post('/proses', 'doProses')->name('doProses');
-        Route::post('/delete', 'doDelete')->name('doDelete');
+        Route::prefix('admin')->group(function () {
+            Route::post('/proses', 'doProses')->name('doProses');
+            Route::post('/delete', 'doDelete')->name('doDelete');
+        });
     });
 });
 
